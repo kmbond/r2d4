@@ -1,0 +1,2 @@
+stimulus,cor_ans,blocks.thisRepN,blocks.thisTrialN,blocks.thisN,blocks.thisIndex,blocks.thisTrial,sequences.thisRepN,sequences.thisTrialN,sequences.thisN,sequences.thisIndex,response.keys,response.corr,response.rt,date,frameRate,expName,session,participant,
+2,2,0,0,0,0,None,0,0,0,0,2,1,0.768938064575,2015_Mar_17_1916,59.926590247,testing_r2d4,001,1,

@@ -1,0 +1,75 @@
+0.5507 	WARNING 	Movie2 stim could not be imported and won't be available
+7.2164 	EXP 	Created window1 = Window(allowGUI=True, allowStencil=False, autoLog=True, bitsMode=UNKNOWN, blendMode='avg', color=array([ 0.,  0.,  0.]), colorSpace='rgb', fullscr=UNKNOWN, gamma=None, lms=UNKNOWN, monitor=<psychopy.monitors.calibTools.Monitor instance at 0x1129d9098>, name='window1', pos=[320, 250], screen=0, size=array([800, 400]), stereo=False, units=u'norm', useFBO=True, viewOri=0.0, viewPos=None, viewScale=None, waitBlanking=True, winType='pyglet')
+7.2171 	EXP 	<method-wrapper '__getattribute__' of attributeSetter object at 0x104bbc0d0>: vertices = array([[-0.5,  0.5],
+       [ 0.5,  0.5],
+       [ 0.5, -0.5],
+       [-0.5, -0.5]])
+7.2188 	EXP 	Created unnamed Rect = Rect(autoDraw=True, autoLog=True, closeShape=True, contrast=1.0, depth=0, fillColor=None, fillColorSpace='rgb', fillRGB=None, interpolate=True, lineColor='black', lineColorSpace='named', lineRGB=array([ 0.,  0.,  0.]), lineWidth=6, name='unnamed Rect', opacity=1.0, ori=array(0.0), pos=array([ 0.,  0.]), size=array([ 1.,  1.]), units=u'norm', vertices=ndarray(...), win=Window(...))
+7.2189 	EXP 	window1: recordFrameIntervals = False
+7.3807 	EXP 	window1: recordFrameIntervals = True
+7.5645 	EXP 	window1: recordFrameIntervals = False
+7.6584 	EXP 	Created instructions = TextStim(alignHoriz='center', alignVert='center', antialias=True, autoLog=True, bold=False, color=u'white', colorSpace='named', contrast=1.0, depth=0.0, flipHoriz=False, flipVert=False, font=u'Arial', fontFiles=[], height=0.1, italic=False, name='instructions', opacity=1.0, ori=0, pos=array([ 0.,  0.]), rgb=array([ 255.,  255.,  255.]), text=unicode(...), units=u'norm', win=Window(...), wrapWidth=1)
+7.6751 	EXP 	Created Target = TextStim(alignHoriz='center', alignVert='center', antialias=True, autoLog=True, bold=False, color=u'white', colorSpace='named', contrast=1.0, depth=-1.0, flipHoriz=False, flipVert=False, font=u'Arial', fontFiles=[], height=0.5, italic=False, name='Target', opacity=1.0, ori=0, pos=array([ 0.,  0.]), rgb=array([ 255.,  255.,  255.]), text=u'default text', units=u'norm', win=Window(...), wrapWidth=1)
+7.6975 	EXP 	instructions: autoDraw = True
+10.2677 	DATA 	Keypress: 1
+10.2817 	EXP 	Imported stimuli.csv as conditions, 4 conditions, 2 params
+10.2829 	EXP 	Created sequence: random, trialTypes=4, nReps=5, seed=None
+10.3320 	EXP 	New trial (rep=0, index=0): {'stimulus': 3, 'cor_ans': 3}
+10.3354 	EXP 	window1: recordFrameIntervals = False
+10.3474 	EXP 	instructions: autoDraw = False
+10.3474 	EXP 	Target: text = 3
+10.3474 	EXP 	window1: recordFrameIntervals = False
+11.3646 	EXP 	Target: autoDraw = True
+11.7496 	DATA 	Keypress: 2
+11.8479 	EXP 	Target: autoDraw = False
+11.9329 	DATA 	Keypress: 3
+12.7829 	EXP 	New trial (rep=0, index=1): {'stimulus': 4, 'cor_ans': 4}
+12.7866 	EXP 	window1: recordFrameIntervals = False
+12.7981 	EXP 	Target: autoDraw = False
+12.7981 	EXP 	Target: text = 4
+12.7982 	EXP 	window1: recordFrameIntervals = False
+13.8147 	EXP 	Target: autoDraw = True
+14.1495 	DATA 	Keypress: 3
+14.2004 	DATA 	Keypress: 4
+14.2988 	EXP 	Target: autoDraw = False
+15.2832 	EXP 	New trial (rep=0, index=2): {'stimulus': 5, 'cor_ans': 5}
+15.2874 	EXP 	window1: recordFrameIntervals = False
+15.2987 	EXP 	Target: autoDraw = False
+15.2987 	EXP 	Target: text = 5
+15.2988 	EXP 	window1: recordFrameIntervals = False
+16.3154 	EXP 	Target: autoDraw = True
+16.6341 	DATA 	Keypress: 2
+16.7987 	EXP 	Target: autoDraw = False
+16.8343 	DATA 	Keypress: 4
+16.8833 	DATA 	Keypress: 5
+17.7836 	EXP 	New trial (rep=0, index=3): {'stimulus': 2, 'cor_ans': 2}
+17.7874 	EXP 	window1: recordFrameIntervals = False
+17.7990 	EXP 	Target: autoDraw = False
+17.7990 	EXP 	Target: text = 2
+17.7991 	EXP 	window1: recordFrameIntervals = False
+18.8158 	EXP 	Target: autoDraw = True
+19.0846 	DATA 	Keypress: 3
+19.2515 	DATA 	Keypress: 2
+19.2994 	EXP 	Target: autoDraw = False
+20.2844 	EXP 	New trial (rep=1, index=0): {'stimulus': 5, 'cor_ans': 5}
+20.2878 	EXP 	window1: recordFrameIntervals = False
+20.2993 	EXP 	Target: autoDraw = False
+20.2993 	EXP 	Target: text = 5
+20.2994 	EXP 	window1: recordFrameIntervals = False
+21.3163 	EXP 	Target: autoDraw = True
+21.5348 	DATA 	Keypress: 1
+21.8001 	EXP 	Target: autoDraw = False
+22.0680 	DATA 	Keypress: 4
+22.7844 	EXP 	New trial (rep=1, index=1): {'stimulus': 3, 'cor_ans': 3}
+22.7877 	EXP 	window1: recordFrameIntervals = False
+22.8000 	EXP 	Target: autoDraw = False
+22.8000 	EXP 	Target: text = 3
+22.8001 	EXP 	window1: recordFrameIntervals = False
+23.8166 	EXP 	Target: autoDraw = True
+24.4164 	EXP 	Target: autoDraw = False
+25.2849 	EXP 	New trial (rep=1, index=2): {'stimulus': 2, 'cor_ans': 2}
+25.2883 	EXP 	window1: recordFrameIntervals = False
+25.3008 	EXP 	Target: autoDraw = False
+25.3008 	EXP 	Target: text = 2
+25.3010 	EXP 	window1: recordFrameIntervals = False
+26.2520 	DATA 	Keypress: escape
