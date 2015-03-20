@@ -1,1 +1,5 @@
-stimulus,cor_ans2,23,34,45,5
+img_id_1,cor_ans_1,img_id_2,cor_ans_2,img_id_3,cor_ans_3,img_id_4,cor_ans_4,img_id_5,cor_ans_5,img_id_6,cor_ans_6,img_id_7,cor_ans_7
+image_folder/stim_5.png,5,image_folder/stim_5.png,5,image_folder/stim_2.png,2,image_folder/stim_2.png,2,image_folder/stim_2.png,2,image_folder/stim_4.png,4,image_folder/stim_2.png,2
+image_folder/stim_2.png,2,image_folder/stim_2.png,2,image_folder/stim_3.png,3,image_folder/stim_3.png,3,image_folder/stim_3.png,3,image_folder/stim_2.png,2,image_folder/stim_3.png,3
+image_folder/stim_4.png,4,image_folder/stim_5.png,5,image_folder/stim_4.png,4,image_folder/stim_4.png,4,image_folder/stim_4.png,4,image_folder/stim_4.png,4,image_folder/stim_4.png,4
+image_folder/stim_3.png,3,image_folder/stim_4.png,4,image_folder/stim_5.png,5,image_folder/stim_5.png,5,image_folder/stim_5.png,5,image_folder/stim_2.png,2,image_folder/stim_5.png,5
