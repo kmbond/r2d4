@@ -10,6 +10,9 @@
 # To conduct the experiment. 
 cd into the directory containing the experimental scripts. 
 1. Use genStims.py to generate random and sequence blocks of stimuli (in the terminal enter python genStims.py). These will be saved under stimuli.csv. genStims should be executed each time the user wants new stimuli, i.e. for a each new subject.
+
 2. The order of random and sequence blocks can be modified by modifying the block_id vector in genStims.py. 1 corresponds to a random presentation of stimuli, 2 corresponds to the sequence presentation of stimuli. 
+
 3. r2d4.py will generate a data folder, and save each subject's performance in that folder under three separate files.
+
 4. N.B The user will be prompted to enter the subjects unique id and session number at the start of each experiment. 
