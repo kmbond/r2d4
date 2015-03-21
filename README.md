@@ -1,5 +1,5 @@
 # Before executing r2d4.py
-1. To run these scripts, the user must have a working version of psychopy installed. It is recommended (and required on coax lab machines running ubuntu) to install psychopy and its dependencies in a virtual environment. 
+1. To run these scripts, the user must have a working version of psychopy installed. It is recommended (and required on coax lab machines running ubuntu) to install psychopy and its dependencies in a virtual environment. To set up the virtual environment correctly, follow these instructions in this order. It is not necessary to install psychopy's builder app to use these scripts. 
 3. If using ubuntu, download and install anaconda (http://continuum.io/downloads), [bash Anaconda.sh]
 4. On coax lab machines, choose the home directory for the install location (home/coaxlab/anaconda). 
 5. Then install psyhopy (pip install psychopy)
