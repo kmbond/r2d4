@@ -430,7 +430,7 @@ for thisBlock_Loop in Block_Loop:
         for thisComponent in BlockComponents:
             if hasattr(thisComponent, 'status'):
                 thisComponent.status = NOT_STARTED
-        print max_rt
+    
         #-------Start Routine "Block"-------
         continueRoutine = True
         while continueRoutine and routineTimer.getTime() > 0:
