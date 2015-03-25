@@ -72,6 +72,37 @@ image = visual.ImageStim(win=win, name='image',
     flipHoriz=False, flipVert=False,
     texRes=128, interpolate=True, depth=0.0)
 
+
+# Initialize components for Feedback
+
+# This feedback puts a small red x underneath the stimulus
+# Right_1 = visual.TextStim(win=win, ori=0, name='Right_1',
+#     text='X',    font='Arial',
+#     pos=[0, -.3], height=0.1, wrapWidth=None,
+#     color='green', colorSpace='rgb', opacity=1,
+#     depth=-6.0)
+
+
+Right_1 = visual.TextStim(win=win, ori=0, name='Right_1',
+    text=u'\u2713',    font='Arial',
+    pos=[0, 0], height=0.9, wrapWidth=None,
+    color='green', colorSpace='rgb', opacity=.7,
+    depth=-6.0)
+
+# Wrong_1 = visual.TextStim(win=win, ori=0, name='Wrong_1',
+#     text='X',    font='Arial',
+#     pos=[0, -.3], height=0.1, wrapWidth=None,
+#     color='red', colorSpace='rgb', opacity=1,
+#     depth=-6.0)
+
+Wrong_1 = visual.TextStim(win=win, ori=0, name='Wrong_1',
+    text='X',    font='Arial',
+    pos=[0, 0], height=0.9, wrapWidth=None,
+    color='red', colorSpace='rgb', opacity=.7,
+    depth=-6.0)
+
+
+
 # Initialize components for Routine "Begin_Blocks"
 Begin_BlocksClock = core.Clock()
 text_3 = visual.TextStim(win=win, ori=0, name='text_3',
@@ -204,7 +235,7 @@ for thisPractice_loop in practice_loop:
     t = 0
     practiceClock.reset()  # clock
     frameN = -1
-    routineTimer.add(1.100000)
+    routineTimer.add(1.1)
     # update component parameters for each repeat
     image.setImage(img_id)
     Practice_response = event.BuilderKeyResponse()  # create an object of type KeyResponse
@@ -213,6 +244,8 @@ for thisPractice_loop in practice_loop:
     practiceComponents = []
     practiceComponents.append(image)
     practiceComponents.append(Practice_response)
+    practiceComponents.append(Wrong_1)
+    practiceComponents.append(Right_1)
     for thisComponent in practiceComponents:
         if hasattr(thisComponent, 'status'):
             thisComponent.status = NOT_STARTED
@@ -252,13 +285,17 @@ for thisPractice_loop in practice_loop:
             if "escape" in theseKeys:
                 endExpNow = True
             if len(theseKeys) > 0:  # at least one key was pressed
-                Practice_response.keys = theseKeys[-1]  # just the last key pressed
-                Practice_response.rt = Practice_response.clock.getTime()
-                # was this 'correct'?
-                if (Practice_response.keys == str(cor_ans)) or (Practice_response.keys == cor_ans):
-                    Practice_response.corr = 1
-                else:
-                    Practice_response.corr = 0
+                if Practice_response.keys == []:
+                    Practice_response.keys = theseKeys[0]  # just the last key pressed
+
+                    Practice_response.rt = Practice_response.clock.getTime()
+                    # was this 'correct'?
+                    if (Practice_response.keys == str(cor_ans)) or (Practice_response.keys == cor_ans):
+                        Practice_response.corr = 1
+                        Right_1.setAutoDraw(True)
+                    else:
+                        Practice_response.corr = 0
+                        Wrong_1.setAutoDraw(True)
 
         # check if all components have finished
         if not continueRoutine:  # a component has requested a forced-end of Routine
@@ -308,6 +345,7 @@ key_resp_3.status = NOT_STARTED
 Begin_BlocksComponents = []
 Begin_BlocksComponents.append(text_3)
 Begin_BlocksComponents.append(key_resp_3)
+
 for thisComponent in Begin_BlocksComponents:
     if hasattr(thisComponent, 'status'):
         thisComponent.status = NOT_STARTED
@@ -427,10 +465,12 @@ for thisBlock_Loop in Block_Loop:
         BlockComponents = []
         BlockComponents.append(image_2)
         BlockComponents.append(key_response)
+        BlockComponents.append(Wrong_1)
+        BlockComponents.append(Right_1)
         for thisComponent in BlockComponents:
             if hasattr(thisComponent, 'status'):
                 thisComponent.status = NOT_STARTED
-    
+
         #-------Start Routine "Block"-------
         continueRoutine = True
         while continueRoutine and routineTimer.getTime() > 0:
@@ -466,13 +506,16 @@ for thisBlock_Loop in Block_Loop:
                 if "escape" in theseKeys:
                     endExpNow = True
                 if len(theseKeys) > 0:  # at least one key was pressed
-                    key_response.keys = theseKeys[-1]  # just the last key pressed
-                    key_response.rt = key_response.clock.getTime()
-                    # was this 'correct'?
-                    if (key_response.keys == str(eval(Block_ans))) or (key_response.keys == eval(Block_ans)):
-                        key_response.corr = 1
-                    else:
-                        key_response.corr = 0
+                    if key_response.keys == []:
+                        key_response.keys = theseKeys[0]  # just the last key pressed
+                        key_response.rt = key_response.clock.getTime()
+                        # was this 'correct'?
+                        if (key_response.keys == str(eval(Block_ans))) or (key_response.keys == eval(Block_ans)):
+                            key_response.corr = 1
+                            Right_1.setAutoDraw(True)
+                        else:
+                            key_response.corr = 0
+                            Wrong_1.setAutoDraw(True)
 
             # check if all components have finished
             if not continueRoutine:  # a component has requested a forced-end of Routine
