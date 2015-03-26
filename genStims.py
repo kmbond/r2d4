@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 img_dict = {2: 'image_folder/stim_2.png', 3: 'image_folder/stim_3.png', 4: 'image_folder/stim_4.png', 5: 'image_folder/stim_5.png'}
 
-length = 32 # number of trials within a  block should be 256
+length = 256 # number of trials within a  block should be 256
 dfStims = pd.DataFrame()
 block_ids = [1, 1, 2, 2, 2, 1, 2] #1 is random #2 is sequence
 
@@ -11,7 +11,6 @@ block_ids = [1, 1, 2, 2, 2, 1, 2] #1 is random #2 is sequence
 def genRandom(length):
     random_stims = []
     random_img_ids = []
-
     for x in range(0,length):
         if len(random_stims) == 0:
             random_stims.append(randint(2,5))
@@ -21,7 +20,6 @@ def genRandom(length):
                 val = randint(2,5)
             random_stims.append(val)
         random_img_ids.append(img_dict[random_stims[x]])
-
     random_img_ids = np.asarray(random_img_ids)
     random_ans= np.asarray(random_stims)
     return (random_img_ids, random_ans)
@@ -29,12 +27,13 @@ def genRandom(length):
 #Generate Sequence Ordering -- needs to be updated to actual sequence.
 def genSequence(length):
     #Generate Sequence Stimuli Ordering.
-    sequence_stims = np.array([2,3,4,5])
+    sequence_stims = [4,5,3,4,2,5,3,2,4,5,4,5,2,4,5,3,2,3,5,3,4,2,3,2,3,5,4,2,4,2,3,5]
+    rota_ind = randint(1,31)
+    sequence_stims = sequence_stims[rota_ind:]  + sequence_stims[:rota_ind]
     sequence_img_ids = []
-    sequence_stims= np.tile(sequence_stims,length/4)
+    sequence_stims= np.tile(sequence_stims,8)
     for x in range(0,length):
         sequence_img_ids.append(img_dict[sequence_stims[x]])
-
     return (sequence_img_ids, sequence_stims)
 
 for type in range(0,len(block_ids)):
