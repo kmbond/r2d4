@@ -40,7 +40,7 @@ endExpNow = False  # flag for 'escape' or other condition => quit the exp
 # Start Code - component code to be run before the window creation
 
 # Setup the Window
-win = visual.Window(size=[700, 350], fullscr=False, screen=0, allowGUI=True, allowStencil=False,
+win = visual.Window(size=[1440, 900], fullscr=False, screen=0, allowGUI=True, allowStencil=False,
     monitor='testMonitor', color=[-1,-1,-1], colorSpace='rgb',
     blendMode='avg', useFBO=True,
     )
@@ -65,9 +65,10 @@ instrText = visual.TextStim(win=win, ori=0, name='instrText',
 
 # Initialize components for Routine "practice"
 practiceClock = core.Clock()
-image = visual.ImageStim(win=win, name='image',
+
+image = visual.ImageStim(win=win, name='image', units='pix',
     image='sin', mask=None,
-    ori=0, pos=[0, 0], size=[0.5, 0.5],
+    ori=0, pos=[0, 0], size=[200,200],
     color=[1,1,1], colorSpace='rgb', opacity=1,
     flipHoriz=False, flipVert=False,
     texRes=128, interpolate=True, depth=0.0)
@@ -113,9 +114,9 @@ text_3 = visual.TextStim(win=win, ori=0, name='text_3',
 
 # Initialize components for Routine "Block"
 BlockClock = core.Clock()
-image_2 = visual.ImageStim(win=win, name='image_2',
+image_2 = visual.ImageStim(win=win, name='image_2',units='pix',
     image='sin', mask=None,
-    ori=0, pos=[0, 0], size=[0.5, 0.5],
+    ori=0, pos=[0, 0], size=[200,200],
     color=[1,1,1], colorSpace='rgb', opacity=1,
     flipHoriz=False, flipVert=False,
     texRes=128, interpolate=True, depth=0.0)
@@ -513,6 +514,7 @@ for thisBlock_Loop in Block_Loop:
                         if (key_response.keys == str(eval(Block_ans))) or (key_response.keys == eval(Block_ans)):
                             key_response.corr = 1
                             Right_1.setAutoDraw(True)
+
                         else:
                             key_response.corr = 0
                             Wrong_1.setAutoDraw(True)
