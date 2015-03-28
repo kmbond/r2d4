@@ -228,6 +228,7 @@ if thisPractice_loop != None:
         exec(paramName + '= thisPractice_loop.' + paramName)
 
 for thisPractice_loop in practice_loop:
+
     currentLoop = practice_loop
     # abbreviate parameter names if possible (e.g. rgb = thisPractice_loop.rgb)
     if thisPractice_loop != None:
@@ -236,7 +237,9 @@ for thisPractice_loop in practice_loop:
 
     #------Prepare to start Routine "practice"-------
     t = 0
-    practiceClock.reset()  # clock
+    practiceClock.reset()
+    routineTimer.add(10)  # clock
+    
     frameN = -1
     # update component parameters for each repeat
     image.setImage(img_id)
