@@ -73,8 +73,14 @@ image = visual.ImageStim(win=win, name='image', units='pix',
     flipHoriz=False, flipVert=False,
     texRes=128, interpolate=True, depth=0.0)
 
-
 # Initialize components for Feedback
+practiceFeedback = visual.TextStim(win=win, ori=0, name='text_4',
+    text=u'Press the space bar to continue. \n',    font=u'Arial',
+    pos=[0, -.6], height=0.1, wrapWidth=None,
+    color=u'white', colorSpace='rgb', opacity=1,
+    depth=0.0)
+
+
 
 # This feedback puts a small red x underneath the stimulus
 # Right_1 = visual.TextStim(win=win, ori=0, name='Right_1',
@@ -96,11 +102,7 @@ Right_1 = visual.TextStim(win=win, ori=0, name='Right_1',
 #     color='red', colorSpace='rgb', opacity=1,
 #     depth=-6.0)
 
-Wrong_1 = visual.TextStim(win=win, ori=0, name='Wrong_1',
-    text='X',    font='Arial',
-    pos=[0, 0], height=0.9, wrapWidth=None,
-    color='red', colorSpace='rgb', opacity=.7,
-    depth=-6.0)
+Wrong_1 = visual.Circle(win=win, units = 'pix', radius = 100,lineColor='red', fillColor = 'red')
 
 
 
@@ -214,7 +216,7 @@ for thisComponent in InstructionsComponents:
 routineTimer.reset()
 
 # set up handler to look after randomisation of conditions etc
-practice_loop = data.TrialHandler(nReps=2, method='sequential',
+practice_loop = data.TrialHandler(nReps=3, method='sequential',
     extraInfo=expInfo, originPath=None,
     trialList=data.importConditions(u'test_stim.csv'),
     seed=None, name='practice_loop')
@@ -236,7 +238,6 @@ for thisPractice_loop in practice_loop:
     t = 0
     practiceClock.reset()  # clock
     frameN = -1
-    routineTimer.add(1.1)
     # update component parameters for each repeat
     image.setImage(img_id)
     Practice_response = event.BuilderKeyResponse()  # create an object of type KeyResponse
@@ -247,6 +248,8 @@ for thisPractice_loop in practice_loop:
     practiceComponents.append(Practice_response)
     practiceComponents.append(Wrong_1)
     practiceComponents.append(Right_1)
+    practiceComponents.append(practiceFeedback)
+
     for thisComponent in practiceComponents:
         if hasattr(thisComponent, 'status'):
             thisComponent.status = NOT_STARTED
@@ -265,8 +268,6 @@ for thisPractice_loop in practice_loop:
             image.tStart = t  # underestimates by a little under one frame
             image.frameNStart = frameN  # exact frame index
             image.setAutoDraw(True)
-        if image.status == STARTED and t >= (.5 + (.6-win.monitorFramePeriod*0.75)): #most of one frame period left
-            image.setAutoDraw(False)
 
         # *Practice_response* updates
         if t >= .5 and Practice_response.status == NOT_STARTED:
@@ -277,8 +278,6 @@ for thisPractice_loop in practice_loop:
             # keyboard checking is just starting
             Practice_response.clock.reset()  # now t=0
             event.clearEvents(eventType='keyboard')
-        if Practice_response.status == STARTED and t >= (.5 + (.6-win.monitorFramePeriod*0.75)): #most of one frame period left
-            Practice_response.status = STOPPED
         if Practice_response.status == STARTED:
             theseKeys = event.getKeys(keyList=['2', '3', '4', '5'])
 
@@ -293,10 +292,15 @@ for thisPractice_loop in practice_loop:
                     # was this 'correct'?
                     if (Practice_response.keys == str(cor_ans)) or (Practice_response.keys == cor_ans):
                         Practice_response.corr = 1
-                        Right_1.setAutoDraw(True)
+
                     else:
                         Practice_response.corr = 0
                         Wrong_1.setAutoDraw(True)
+                    practiceFeedback.setAutoDraw(True)
+
+        # a response ends the routine
+        if practiceFeedback.status == STARTED and event.getKeys(keyList=['space']):
+            continueRoutine = False
 
         # check if all components have finished
         if not continueRoutine:  # a component has requested a forced-end of Routine
@@ -319,17 +323,7 @@ for thisPractice_loop in practice_loop:
     for thisComponent in practiceComponents:
         if hasattr(thisComponent, "setAutoDraw"):
             thisComponent.setAutoDraw(False)
-    # check responses
-    if Practice_response.keys in ['', [], None]:  # No response was made
-       Practice_response.keys=None
-       # was no response the correct answer?!
-       if str(cor_ans).lower() == 'none': Practice_response.corr = 1  # correct non-response
-       else: Practice_response.corr = 0  # failed to respond (incorrectly)
-    # store data for practice_loop (TrialHandler)
-    practice_loop.addData('Practice_response.keys',Practice_response.keys)
-    practice_loop.addData('Practice_response.corr', Practice_response.corr)
-    if Practice_response.keys != None:  # we had a response
-        practice_loop.addData('Practice_response.rt', Practice_response.rt)
+    # Store nothing
     thisExp.nextEntry()
 
 # completed 2 repeats of 'practice_loop'
@@ -445,6 +439,7 @@ for thisBlock_Loop in Block_Loop:
 
     block_rts = []
     acc_last_block = []
+    max_rt = max_rt
     for thisTrial in trials:
 
         currentLoop = trials
@@ -496,9 +491,11 @@ for thisBlock_Loop in Block_Loop:
                 key_response.frameNStart = frameN  # exact frame index
                 key_response.status = STARTED
                 # keyboard checking is just starting
+
                 key_response.clock.reset()  # now t=0
+
                 event.clearEvents(eventType='keyboard')
-            if key_response.status == STARTED and t >= (.5 + (max_rt-win.monitorFramePeriod*0.75)): #most of one frame period left
+            if key_response.status == STARTED and t >= (.5 + (max_rt -win.monitorFramePeriod*0.75)): #most of one frame period left
                 key_response.status = STOPPED
             if key_response.status == STARTED:
                 theseKeys = event.getKeys(keyList=['2', '3', '4', '5'])
@@ -506,6 +503,8 @@ for thisBlock_Loop in Block_Loop:
                 # check for quit:
                 if "escape" in theseKeys:
                     endExpNow = True
+
+
                 if len(theseKeys) > 0:  # at least one key was pressed
                     if key_response.keys == []:
                         key_response.keys = theseKeys[0]  # just the last key pressed
@@ -513,18 +512,28 @@ for thisBlock_Loop in Block_Loop:
                         # was this 'correct'?
                         if (key_response.keys == str(eval(Block_ans))) or (key_response.keys == eval(Block_ans)):
                             key_response.corr = 1
-                            Right_1.setAutoDraw(True)
 
                         else:
                             key_response.corr = 0
                             Wrong_1.setAutoDraw(True)
+                            win.flip()
+                    continueRoutine = False
+
+            if t > max_rt+.5 and key_response.keys in ['', [], None]:  # No response was made
+                key_response.keys=None
+                key_response.corr = 0
+                Wrong_1.setAutoDraw(True)
+                win.flip()
+                continueRoutine= False
 
             # check if all components have finished
             if not continueRoutine:  # a component has requested a forced-end of Routine
                 break
             continueRoutine = False  # will revert to True if at least one component still running
             for thisComponent in BlockComponents:
+
                 if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
+
                     continueRoutine = True
                     break  # at least one component has not yet finished
 
@@ -543,6 +552,9 @@ for thisBlock_Loop in Block_Loop:
         # check responses
         if key_response.keys in ['', [], None]:  # No response was made
            key_response.keys=None
+
+
+
            # was no response the correct answer?!
            if str(eval(Block_ans)).lower() == 'none': key_response.corr = 1  # correct non-response
            else: key_response.corr = 0  # failed to respond (incorrectly)
