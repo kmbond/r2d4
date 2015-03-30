@@ -239,7 +239,7 @@ for thisPractice_loop in practice_loop:
     t = 0
     practiceClock.reset()
     routineTimer.add(10)  # clock
-    
+
     frameN = -1
     # update component parameters for each repeat
     image.setImage(img_id)
@@ -327,7 +327,6 @@ for thisPractice_loop in practice_loop:
         if hasattr(thisComponent, "setAutoDraw"):
             thisComponent.setAutoDraw(False)
     # Store nothing
-    thisExp.nextEntry()
 
 # completed 2 repeats of 'practice_loop'
 
