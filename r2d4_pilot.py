@@ -44,7 +44,7 @@ win = visual.Window(size=[1440, 900], fullscr=False, screen=0, allowGUI=True, al
     monitor='testMonitor', color=[-1,-1,-1], colorSpace='rgb',
     blendMode='avg', useFBO=True
     )
-win.waitBanking=False
+win.waitBlanking=False
 #Add context
 context = visual.Rect(win, width=1, height=1, autoDraw = True, lineColor='black', lineWidth = 6)
 
