@@ -42,7 +42,7 @@ endExpNow = False  # flag for 'escape' or other condition => quit the exp
 # Setup the Window
 win = visual.Window(size=[1440, 900], fullscr=False, screen=0, allowGUI=True, allowStencil=False,
     monitor='testMonitor', color=[-1,-1,-1], colorSpace='rgb',
-    blendMode='avg', useFBO=True,
+    blendMode='avg', useFBO=True,waitBanking = False
     )
 
 #Add context
@@ -68,7 +68,7 @@ practiceClock = core.Clock()
 
 image = visual.ImageStim(win=win, name='image', units='pix',
     image='sin', mask=None,
-    ori=0, pos=[0, 0], size=[200,200],
+    ori=0, pos=[0, 0], size=[128,128],
     color=[1,1,1], colorSpace='rgb', opacity=1,
     flipHoriz=False, flipVert=False,
     texRes=128, interpolate=True, depth=0.0)
@@ -109,7 +109,7 @@ Wrong_1 = visual.Circle(win=win, units = 'pix', radius = 100,lineColor='red', fi
 # Initialize components for Routine "Begin_Blocks"
 Begin_BlocksClock = core.Clock()
 text_3 = visual.TextStim(win=win, ori=0, name='text_3',
-    text=u'End of Practice. Ready to begin experiment. Press any key to continue. ',    font=u'Arial',
+    text=u'End of practice rounds. Press any key to continue. ',    font=u'Arial',
     pos=[0, 0], height=0.1, wrapWidth=None,
     color=u'white', colorSpace='rgb', opacity=1,
     depth=0.0)
