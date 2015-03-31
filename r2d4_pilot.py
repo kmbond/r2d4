@@ -42,9 +42,9 @@ endExpNow = False  # flag for 'escape' or other condition => quit the exp
 # Setup the Window
 win = visual.Window(size=[1440, 900], fullscr=False, screen=0, allowGUI=True, allowStencil=False,
     monitor='testMonitor', color=[-1,-1,-1], colorSpace='rgb',
-    blendMode='avg', useFBO=True,waitBanking = False
+    blendMode='avg', useFBO=True
     )
-
+win.waitBanking=False
 #Add context
 context = visual.Rect(win, width=1, height=1, autoDraw = True, lineColor='black', lineWidth = 6)
 
