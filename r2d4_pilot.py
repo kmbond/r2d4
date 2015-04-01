@@ -90,18 +90,6 @@ practiceFeedback = visual.TextStim(win=win, ori=0, name='text_4',
 #     depth=-6.0)
 
 
-Right_1 = visual.TextStim(win=win, ori=0, name='Right_1',
-    text=u'\u2713',    font='Arial',
-    pos=[0, 0], height=0.9, wrapWidth=None,
-    color='green', colorSpace='rgb', opacity=.7,
-    depth=-6.0)
-
-# Wrong_1 = visual.TextStim(win=win, ori=0, name='Wrong_1',
-#     text='X',    font='Arial',
-#     pos=[0, -.3], height=0.1, wrapWidth=None,
-#     color='red', colorSpace='rgb', opacity=1,
-#     depth=-6.0)
-
 Wrong_1 = visual.Circle(win=win, units = 'pix', radius = 100,lineColor='red', fillColor = 'red')
 
 
@@ -250,7 +238,6 @@ for thisPractice_loop in practice_loop:
     practiceComponents.append(image)
     practiceComponents.append(Practice_response)
     practiceComponents.append(Wrong_1)
-    practiceComponents.append(Right_1)
     practiceComponents.append(practiceFeedback)
 
     for thisComponent in practiceComponents:
@@ -266,14 +253,14 @@ for thisPractice_loop in practice_loop:
         # update/draw components on each frame
 
         # *image* updates
-        if t >= .5 and image.status == NOT_STARTED:
+        if t >= .25 and image.status == NOT_STARTED:
             # keep track of start time/frame for later
             image.tStart = t  # underestimates by a little under one frame
             image.frameNStart = frameN  # exact frame index
             image.setAutoDraw(True)
 
         # *Practice_response* updates
-        if t >= .5 and Practice_response.status == NOT_STARTED:
+        if t >= .25 and Practice_response.status == NOT_STARTED:
             # keep track of start time/frame for later
             Practice_response.tStart = t  # underestimates by a little under one frame
             Practice_response.frameNStart = frameN  # exact frame index
@@ -418,6 +405,7 @@ if thisBlock_Loop != None:
 
 nBlock = 0
 max_rt = .6
+iti = .25
 
 for thisBlock_Loop in Block_Loop:
     nBlock = nBlock+1
@@ -454,7 +442,7 @@ for thisBlock_Loop in Block_Loop:
         t = 0
         BlockClock.reset()  # clock
         frameN = -1
-        routineTimer.add(.5+max_rt)
+        routineTimer.add(iti+max_rt)
         # update component parameters for each repeat
         image_2.setImage(eval(Block_id))
         key_response = event.BuilderKeyResponse()  # create an object of type KeyResponse
@@ -464,7 +452,6 @@ for thisBlock_Loop in Block_Loop:
         BlockComponents.append(image_2)
         BlockComponents.append(key_response)
         BlockComponents.append(Wrong_1)
-        BlockComponents.append(Right_1)
         for thisComponent in BlockComponents:
             if hasattr(thisComponent, 'status'):
                 thisComponent.status = NOT_STARTED
@@ -478,16 +465,16 @@ for thisBlock_Loop in Block_Loop:
             # update/draw components on each frame
 
             # *image_2* updates
-            if t >= .5 and image_2.status == NOT_STARTED:
+            if t >= iti and image_2.status == NOT_STARTED:
                 # keep track of start time/frame for later
                 image_2.tStart = t  # underestimates by a little under one frame
                 image_2.frameNStart = frameN  # exact frame index
                 image_2.setAutoDraw(True)
-            if image_2.status == STARTED and t >= (.5 + (max_rt-win.monitorFramePeriod*0.75)): #most of one frame period left
+            if image_2.status == STARTED and t >= (iti + (max_rt-win.monitorFramePeriod*0.75)): #most of one frame period left
                 image_2.setAutoDraw(False)
 
             # *key_response* updates
-            if t >= .5 and key_response.status == NOT_STARTED:
+            if t >= iti and key_response.status == NOT_STARTED:
                 # keep track of start time/frame for later
                 key_response.tStart = t  # underestimates by a little under one frame
                 key_response.frameNStart = frameN  # exact frame index
@@ -497,7 +484,7 @@ for thisBlock_Loop in Block_Loop:
                 key_response.clock.reset()  # now t=0
 
                 event.clearEvents(eventType='keyboard')
-            if key_response.status == STARTED and t >= (.5 + (max_rt -win.monitorFramePeriod*0.75)): #most of one frame period left
+            if key_response.status == STARTED and t >= (iti + (max_rt -win.monitorFramePeriod*0.75)): #most of one frame period left
                 key_response.status = STOPPED
             if key_response.status == STARTED:
                 theseKeys = event.getKeys(keyList=['2', '3', '4', '5'])
@@ -521,7 +508,7 @@ for thisBlock_Loop in Block_Loop:
                             win.flip()
                     continueRoutine = False
 
-            if t > max_rt+.5 and key_response.keys in ['', [], None]:  # No response was made
+            if t > max_rt+iti and key_response.keys in ['', [], None]:  # No response was made
                 key_response.keys=None
                 key_response.corr = 0
                 Wrong_1.setAutoDraw(True)
