@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 img_dict = {2: 'image_folder/stim_2.png', 3: 'image_folder/stim_3.png', 4: 'image_folder/stim_4.png', 5: 'image_folder/stim_5.png'}
 
-length = 256 # number of trials within a  block should be 256
+length = 32 # number of trials within a  block should be 256
 dfStims = pd.DataFrame()
 block_ids = [1, 1, 2, 2, 2, 1, 2] #1 is random #2 is sequence
 
@@ -31,7 +31,7 @@ def genSequence(length):
     rota_ind = randint(1,31)
     sequence_stims = sequence_stims[rota_ind:]  + sequence_stims[:rota_ind]
     sequence_img_ids = []
-    sequence_stims= np.tile(sequence_stims,8)
+    sequence_stims= np.tile(sequence_stims,1)
     for x in range(0,length):
         sequence_img_ids.append(img_dict[sequence_stims[x]])
     return (sequence_img_ids, sequence_stims)
@@ -39,11 +39,11 @@ def genSequence(length):
 for type in range(0,len(block_ids)):
     if block_ids[type] == 1:
         img_ids, cor_ans = genRandom(length)
-        dfStims['img_id_'+str(type+1)] = img_ids
-        dfStims['cor_ans_'+str(type+1)] = cor_ans
+        dfStims['block_'+str(type+1)+'_img'] = img_ids
+        dfStims['block_'+str(type+1)+'_ans'] = cor_ans
     elif block_ids[type] == 2:
         img_ids, cor_ans = genSequence(length)
-        dfStims['img_id_'+str(type+1)] = img_ids
-        dfStims['cor_ans_'+str(type+1)] = cor_ans
+        dfStims['block_'+str(type+1)+'_img'] = img_ids
+        dfStims['block_'+str(type+1)+'_ans'] = cor_ans
 
 dfStims.to_csv('stimuli.csv', index= False)
