@@ -10,6 +10,8 @@ import numpy as np  # whole numpy lib is available, prepend 'np.'
 from numpy import sin, cos, tan, log, log10, pi, average, sqrt, std, deg2rad, rad2deg, linspace, asarray
 from numpy.random import random, randint, normal, shuffle
 import os  # handy system and path functions
+import statsmodels.formula.api as sm
+import matplotlib.pyplot as plt
 
 # Ensure that relative paths start from the same directory as this script
 _thisDir = os.path.dirname(os.path.abspath(__file__))
@@ -30,8 +32,8 @@ filename = _thisDir + os.sep + 'data/%s_%s_%s' %(expInfo['participant'], expName
 # Output summary data and analyzed files
 out_sum_fn =  _thisDir + os.sep +'data/summary_%s_%s_%s.csv' %(expInfo['participant'], expName, expInfo['date'])
 out_all_fn =  _thisDir + os.sep +'data/all_data_%s_%s_%s.csv' %(expInfo['participant'], expName, expInfo['date'])
-data_out = pd.DataFrame(columns=('block', 'response', 'rt'))
-data_summary = pd.DataFrame(columns = ('block', 'accuracy', 'rt_all', 'rt_cor'))
+
+data_out = pd.DataFrame(columns=('block','response','rt'))
 
 
 # An ExperimentHandler isn't essential but helps with data saving
@@ -417,7 +419,7 @@ if thisBlock_Loop != None:
 
 nBlock = 0
 max_rt = .6
-iti = .25
+iti = .3
 
 for thisBlock_Loop in Block_Loop:
     nBlock = nBlock+1
@@ -719,14 +721,43 @@ for thisComponent in End_ExperimentComponents:
 
 
 #build summary statistics file
+lag_names = ['lag' + str(i) for i in  range(1,32)]
+data_lags = pd.DataFrame(columns = lag_names)
+sum_names = ['block', 'accuracy', 'rt_all', 'rt_cor']
+data_summary = pd.DataFrame(columns = (sum_names))
+
+skip_index = 32 #CHANGE THIS BACK TO 32 FOR FULL DATASET
+max_lags = 31
 for i in np.unique(data_out[['block']]):
     block_df = data_out.loc[data_out['block']==i]
     mean_acc = block_df[['response']].mean()
     rt_all = block_df[['rt']].mean()
-    block_df = block_df.loc[block_df['response']==1]
-    rt_cor = block_df[['rt']].mean()
-    data_summary.loc[i] = [i, mean_acc.response, rt_all.rt, rt_cor.rt ]
-    #add std
+    block_df_cor = block_df.loc[block_df['response']==1]
+    rt_cor = block_df_cor[['rt']].mean()
+
+    #del first n trials
+    good_trials = block_df.drop(block_df.index[:skip_index])
+    #replace NaNs with mean of rts in that block
+    good_trials = good_trials[['rt']].replace(np.nan,rt_cor.rt)
+
+    #regress the good trials
+    y = np.array(good_trials['rt'])
+    x = np.linspace(1,y.size,y.size)
+    x = np.vstack([x,np.ones(len(x))]).T
+    result = sm.OLS( y, x ).fit()
+    R = result.resid
+
+    #calculate autocorrelation and plot if desired:
+    fig = plt.figure()
+    ax1 = fig.add_subplot(211)
+    lags,c,line,b = ax1.acorr(R, normed=True, maxlags=max_lags)
+    ax1.axhline(0, color='black', lw=2)
+    lags = c[32:]
+    data_lags.loc[i] = lags
+    data_summary.loc[i] = [i, mean_acc.response, rt_all.rt, rt_cor.rt]
+
+
+data_summary = pd.merge(data_summary, data_lags, left_on = 'block', right_on='lag1',left_index = True,right_index = True, how= 'outer')
 data_summary.to_csv(out_sum_fn, index=False)
 data_out.to_csv(out_all_fn, index=False)
 win.close()
