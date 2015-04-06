@@ -283,7 +283,7 @@ for thisPractice_loop in practice_loop:
             Practice_response.clock.reset()  # now t=0
             event.clearEvents(eventType='keyboard')
         if Practice_response.status == STARTED:
-            theseKeys = event.getKeys(keyList=['2', '3', '4', '5'])
+            theseKeys = event.getKeys(keyList=['2', '3', '4', '5','h', 'j', 'k', 'l'])
 
             # check for quit:
             if "escape" in theseKeys:
@@ -501,7 +501,7 @@ for thisBlock_Loop in Block_Loop:
             if key_response.status == STARTED and t >= (iti + (max_rt -win.monitorFramePeriod*0.75)): #most of one frame period left
                 key_response.status = STOPPED
             if key_response.status == STARTED:
-                theseKeys = event.getKeys(keyList=['2', '3', '4', '5'])
+                theseKeys = event.getKeys(keyList=['2', '3', '4', '5', 'h', 'j', 'k', 'l'])
 
                 # check for quit:
                 if "escape" in theseKeys:
