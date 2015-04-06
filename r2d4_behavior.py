@@ -520,6 +520,7 @@ for thisBlock_Loop in Block_Loop:
                             key_response.corr = 0
                             Wrong_1.setAutoDraw(True)
                             win.flip()
+                            core.wait(0.05)
                     continueRoutine = False
 
             if t > max_rt+iti and key_response.keys in ['', [], None]:  # No response was made
@@ -527,7 +528,7 @@ for thisBlock_Loop in Block_Loop:
                 key_response.corr = 0
                 Wrong_1.setAutoDraw(True)
                 win.flip()
-
+                core.wait(0.05)
                 continueRoutine= False
 
             # check if all components have finished
