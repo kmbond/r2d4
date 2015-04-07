@@ -594,6 +594,12 @@ for thisBlock_Loop in Block_Loop:
 
     # completed 1 repeats of 'trials'
 
+    #feedback text component after block completion.
+    text_4 = visual.TextStim(win=win, ori=0, name='text_2',
+        text='End of Block. You got %i trials correct. Your mean response time was : %.2f. \n Press any key to continue' %(n_corr,mean_rt),    font=u'Arial',
+        pos=[0, 0], height=0.1, wrapWidth=None,
+        color=u'white', colorSpace='rgb', opacity=1,
+        depth=0.0)
 
     #------Prepare to start Routine "Feedback"-------
     t = 0
@@ -604,7 +610,7 @@ for thisBlock_Loop in Block_Loop:
     key_resp_5.status = NOT_STARTED
     # keep track of which components have finished
     FeedbackComponents = []
-    FeedbackComponents.append(text_2)
+    FeedbackComponents.append(text_4)
     FeedbackComponents.append(key_resp_5)
     for thisComponent in FeedbackComponents:
         if hasattr(thisComponent, 'status'):
@@ -624,11 +630,7 @@ for thisBlock_Loop in Block_Loop:
             text_2.tStart = t  # underestimates by a little under one frame
             text_2.frameNStart = frameN  # exact frame index
             text_2.setAutoDraw(True)
-            text_4 = visual.TextStim(win=win, ori=0, name='text_2',
-                text='End of Block. You got %i trials correct. Your mean response time was : (rt=%.2f). Press any key to continue' %(n_corr,mean_rt),    font=u'Arial',
-                pos=[0, 0], height=0.1, wrapWidth=None,
-                color=u'white', colorSpace='rgb', opacity=1,
-                depth=0.0)
+
             text_4.setAutoDraw(True)
             core.wait(.5)
         # *key_resp_5* updates
