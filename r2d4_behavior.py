@@ -127,8 +127,10 @@ image_2 = visual.ImageStim(win=win, name='image_2',units='pix',
 
 # Initialize components for Routine "Feedback"
 FeedbackClock = core.Clock()
+#initialize n_corr and mean_Rt
+
 text_2 = visual.TextStim(win=win, ori=0, name='text_2',
-    text=u'End of Block. Press any key to continue',    font=u'Arial',
+    text='',    font=u'Arial',
     pos=[0, 0], height=0.1, wrapWidth=None,
     color=u'white', colorSpace='rgb', opacity=1,
     depth=0.0)
@@ -418,7 +420,7 @@ if thisBlock_Loop != None:
         exec(paramName + '= thisBlock_Loop.' + paramName)
 
 nBlock = 0
-max_rt = .6
+max_rt = 1.0
 iti = .3
 
 for thisBlock_Loop in Block_Loop:
@@ -520,7 +522,7 @@ for thisBlock_Loop in Block_Loop:
                             key_response.corr = 0
                             Wrong_1.setAutoDraw(True)
                             win.flip()
-                            core.wait(0.05)
+                            core.wait(0.1)
                     continueRoutine = False
 
             if t > max_rt+iti and key_response.keys in ['', [], None]:  # No response was made
@@ -528,7 +530,7 @@ for thisBlock_Loop in Block_Loop:
                 key_response.corr = 0
                 Wrong_1.setAutoDraw(True)
                 win.flip()
-                core.wait(0.05)
+                core.wait(0.1)
                 continueRoutine= False
 
             # check if all components have finished
@@ -581,12 +583,12 @@ for thisBlock_Loop in Block_Loop:
 
     n_corr = np.sum(acc_last_block)
     acc_last_block = n_corr/len(acc_last_block)
-    mean_rt = np.mean(block_rts)
+    mean_rt = np.nanmean(block_rts)
     std_rt = np.std(block_rts)
     adapt_rt = mean_rt+std_rt
 
     if (adapt_rt <.200 or acc_last_block < 0.75) or (nBlock == 6 or nBlock == 7) :
-        max_rt = 0.6
+        max_rt = 1.0
     else:
         max_rt = adapt_rt
 
@@ -622,15 +624,24 @@ for thisBlock_Loop in Block_Loop:
             text_2.tStart = t  # underestimates by a little under one frame
             text_2.frameNStart = frameN  # exact frame index
             text_2.setAutoDraw(True)
-
+            text_4 = visual.TextStim(win=win, ori=0, name='text_2',
+                text='End of Block. You got %i trials correct. Your mean response time was : (rt=%.2f). Press any key to continue' %(n_corr,mean_rt),    font=u'Arial',
+                pos=[0, 0], height=0.1, wrapWidth=None,
+                color=u'white', colorSpace='rgb', opacity=1,
+                depth=0.0)
+            text_4.setAutoDraw(True)
+            core.wait(.5)
         # *key_resp_5* updates
         if t >= 0.0 and key_resp_5.status == NOT_STARTED:
             # keep track of start time/frame for later
             key_resp_5.tStart = t  # underestimates by a little under one frame
             key_resp_5.frameNStart = frameN  # exact frame index
             key_resp_5.status = STARTED
+
             # keyboard checking is just starting
             event.clearEvents(eventType='keyboard')
+
+
         if key_resp_5.status == STARTED:
             theseKeys = event.getKeys()
 
@@ -727,7 +738,7 @@ data_lags = pd.DataFrame(columns = lag_names)
 sum_names = ['block', 'accuracy', 'rt_all', 'rt_cor']
 data_summary = pd.DataFrame(columns = (sum_names))
 
-skip_index = 32 #CHANGE THIS BACK TO 32 FOR FULL DATASET
+skip_index = 32
 max_lags = 31
 for i in np.unique(data_out[['block']]):
     block_df = data_out.loc[data_out['block']==i]
@@ -736,7 +747,7 @@ for i in np.unique(data_out[['block']]):
     block_df_cor = block_df.loc[block_df['response']==1]
     rt_cor = block_df_cor[['rt']].mean()
 
-    #del first n trials
+    #del skip trials
     good_trials = block_df.drop(block_df.index[:skip_index])
     #replace NaNs with mean of rts in that block
     good_trials = good_trials[['rt']].replace(np.nan,rt_cor.rt)
