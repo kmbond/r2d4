@@ -51,7 +51,7 @@ endExpNow = False  # flag for 'escape' or other condition => quit the exp
 # Start Code - component code to be run before the window creation
 
 # Setup the Window
-win = visual.Window(size=[200,200], fullscr=True, screen=0, allowGUI=True, allowStencil=False,
+win = visual.Window(size=[400,400], fullscr=False, screen=0, allowGUI=True, allowStencil=False,
     monitor='testMonitor', color=[-1,-1,-1], colorSpace='rgb',
     blendMode='avg', useFBO=True
     )
@@ -584,7 +584,7 @@ for thisBlock_Loop in Block_Loop:
     n_corr = np.sum(acc_last_block)
     acc_last_block = n_corr/len(acc_last_block)
     mean_rt = np.nanmean(block_rts)
-    std_rt = np.std(block_rts)
+    std_rt = np.nanstd(block_rts)
     adapt_rt = mean_rt+std_rt
 
     if (adapt_rt <.200 or acc_last_block < 0.75) or (nBlock == 6 or nBlock == 7) :
@@ -625,13 +625,13 @@ for thisBlock_Loop in Block_Loop:
         # update/draw components on each frame
 
         # *text_2* updates
-        if t >= 0.0 and text_2.status == NOT_STARTED:
+        if t >= 0.0 and text_4.status == NOT_STARTED:
             # keep track of start time/frame for later
-            text_2.tStart = t  # underestimates by a little under one frame
-            text_2.frameNStart = frameN  # exact frame index
-            text_2.setAutoDraw(True)
+            text_4.tStart = t  # underestimates by a little under one frame
+            text_4.frameNStart = frameN  # exact frame index
 
             text_4.setAutoDraw(True)
+            event.clearEvents(eventType='keyboard')
             core.wait(.5)
         # *key_resp_5* updates
         if t >= 0.0 and key_resp_5.status == NOT_STARTED:
@@ -764,12 +764,11 @@ for i in np.unique(data_out[['block']]):
     #calculate autocorrelation and plot if desired:
     fig = plt.figure()
     ax1 = fig.add_subplot(211)
-    lags,c,line,b = ax1.acorr(R, normed=True, maxlags=max_lags)
+    lag_trials,c,line,b = ax1.acorr(R, normed=True, maxlags=max_lags)
     ax1.axhline(0, color='black', lw=2)
     lags = c[32:]
     data_lags.loc[i] = lags
     data_summary.loc[i] = [i, mean_acc.response, rt_all.rt, rt_cor.rt]
-
 
 data_summary = pd.merge(data_summary, data_lags, left_on = 'block', right_on='lag1',left_index = True,right_index = True, how= 'outer')
 data_summary.to_csv(out_sum_fn, index=False)
