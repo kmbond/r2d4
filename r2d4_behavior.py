@@ -12,6 +12,8 @@ from numpy.random import random, randint, normal, shuffle
 import os  # handy system and path functions
 import statsmodels.formula.api as sm
 import matplotlib.pyplot as plt
+import seaborn as sns
+
 
 # Ensure that relative paths start from the same directory as this script
 _thisDir = os.path.dirname(os.path.abspath(__file__))
@@ -33,7 +35,7 @@ filename = _thisDir + os.sep + 'data/%s_%s_%s' %(expInfo['participant'], expName
 out_sum_fn =  _thisDir + os.sep +'data/summary_%s_%s_%s.csv' %(expInfo['participant'], expName, expInfo['date'])
 out_all_fn =  _thisDir + os.sep +'data/all_data_%s_%s_%s.csv' %(expInfo['participant'], expName, expInfo['date'])
 
-data_out = pd.DataFrame(columns=('block','response','rt'))
+data_out = pd.DataFrame(columns=('block','response','rt', 'type'))
 
 
 # An ExperimentHandler isn't essential but helps with data saving
@@ -55,7 +57,6 @@ win = visual.Window(size=[400,400], fullscr=False, screen=0, allowGUI=True, allo
     monitor='testMonitor', color=[-1,-1,-1], colorSpace='rgb',
     blendMode='avg', useFBO=True
     )
-win.waitBlanking=False
 #No context
 #context = visual.Rect(win, width=1, height=1, autoDraw = True, lineColor='black', lineWidth = 6)
 
@@ -420,8 +421,9 @@ if thisBlock_Loop != None:
         exec(paramName + '= thisBlock_Loop.' + paramName)
 
 nBlock = 0
-max_rt = 1.0
-iti = .3
+max_rt = 1
+iti = .35
+RTclock = core.Clock()
 
 for thisBlock_Loop in Block_Loop:
     nBlock = nBlock+1
@@ -464,6 +466,8 @@ for thisBlock_Loop in Block_Loop:
         key_response = event.BuilderKeyResponse()  # create an object of type KeyResponse
         key_response.status = NOT_STARTED
         # keep track of which components have finished
+        #see if this works better:
+
         BlockComponents = []
         BlockComponents.append(image_2)
         BlockComponents.append(key_response)
@@ -479,72 +483,45 @@ for thisBlock_Loop in Block_Loop:
             t = BlockClock.getTime()
             frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
             # update/draw components on each frame
-
             # *image_2* updates
-            if t >= iti and image_2.status == NOT_STARTED:
-                # keep track of start time/frame for later
-                image_2.tStart = t  # underestimates by a little under one frame
-                image_2.frameNStart = frameN  # exact frame index
-                image_2.setAutoDraw(True)
-            if image_2.status == STARTED and t >= (iti + (max_rt-win.monitorFramePeriod*0.75)): #most of one frame period left
-                image_2.setAutoDraw(False)
 
-            # *key_response* updates
-            if t >= iti and key_response.status == NOT_STARTED:
-                # keep track of start time/frame for later
-                key_response.tStart = t  # underestimates by a little under one frame
-                key_response.frameNStart = frameN  # exact frame index
-                key_response.status = STARTED
-                # keyboard checking is just starting
-
-                key_response.clock.reset()  # now t=0
-
-                event.clearEvents(eventType='keyboard')
-            if key_response.status == STARTED and t >= (iti + (max_rt -win.monitorFramePeriod*0.75)): #most of one frame period left
-                key_response.status = STOPPED
-            if key_response.status == STARTED:
-                theseKeys = event.getKeys(keyList=['2', '3', '4', '5', 'h', 'j', 'k', 'l'])
-
-                # check for quit:
-                if "escape" in theseKeys:
-                    endExpNow = True
+            image_2.setAutoDraw(True)
+            win.flip()
+            RTclock.reset()
+            event.clearEvents(eventType='keyboard')
+            theseKeys = event.waitKeys(max_rt,('h','j','k','l'), timeStamped = RTclock)
 
 
-                if len(theseKeys) > 0:  # at least one key was pressed
-                    if key_response.keys == []:
-                        key_response.keys = theseKeys[0]  # just the last key pressed
-                        key_response.rt = key_response.clock.getTime()
-                        # was this 'correct'?
-                        if (key_response.keys == str(eval(Block_ans))) or (key_response.keys == eval(Block_ans)):
-                            key_response.corr = 1
 
-                        else:
-                            key_response.corr = 0
-                            Wrong_1.setAutoDraw(True)
-                            win.flip()
-                            core.wait(0.1)
-                    continueRoutine = False
-
-            if t > max_rt+iti and key_response.keys in ['', [], None]:  # No response was made
-                key_response.keys=None
+            if theseKeys is None:
                 key_response.corr = 0
+                key_response.keys=None
+                key_response.rt = float('nan')
                 Wrong_1.setAutoDraw(True)
                 win.flip()
                 core.wait(0.1)
-                continueRoutine= False
+                continueRoutine=False
 
-            # check if all components have finished
-            if not continueRoutine:  # a component has requested a forced-end of Routine
-                break
-            continueRoutine = False  # will revert to True if at least one component still running
+            elif(len(theseKeys[0]) > 0):
+                key_response.keys = theseKeys[0][0]  # just the last key pressed
+                key_response.rt = theseKeys[0][1]
+                # was this 'correct'?
+                if (key_response.keys == str(eval(Block_ans))) or (key_response.keys == eval(Block_ans)):
+                    key_response.corr = 1
+
+                else:
+                    key_response.corr = 0
+                    Wrong_1.setAutoDraw(True)
+                    win.flip()
+                    core.wait(0.1)
+                continueRoutine = False
+
             for thisComponent in BlockComponents:
+                if hasattr(thisComponent, "setAutoDraw"):
+                    thisComponent.setAutoDraw(False)
+                    win.flip()
 
-                if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
-
-                    continueRoutine = True
-                    break  # at least one component has not yet finished
-
-            # check for quit (the Esc key)
+            core.wait(iti)
             if endExpNow or event.getKeys(keyList=["escape"]):
                 core.quit()
 
@@ -552,19 +529,9 @@ for thisBlock_Loop in Block_Loop:
             if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
                 win.flip()
 
-        #-------Ending Routine "Block"-------
-        for thisComponent in BlockComponents:
-            if hasattr(thisComponent, "setAutoDraw"):
-                thisComponent.setAutoDraw(False)
-        # check responses
-        if key_response.keys in ['', [], None]:  # No response was made
-           key_response.keys=None
-           key_response.rt = float('nan')
 
 
-           # was no response the correct answer?!
-           if str(eval(Block_ans)).lower() == 'none': key_response.corr = 1  # correct non-response
-           else: key_response.corr = 0  # failed to respond (incorrectly)
+
         # store data for trials (TrialHandler)
         trials.addData('key_response.keys',key_response.keys)
         trials.addData('key_response.corr', key_response.corr)
@@ -576,7 +543,13 @@ for thisBlock_Loop in Block_Loop:
         acc_last_block = np.append(acc_last_block, key_response.corr)
 
         #save data in case program crashes -- remove this if its causing any hold ups
-        data_out.loc[len(data_out)+1]=[nBlock, key_response.corr, key_response.rt]
+        if nBlock in [1,2,6]:
+            trial_type = 1
+        elif nBlock in [2,4,5,7]:
+            trial_type = 2
+
+        print nBlock, key_response.corr, key_response.rt, trial_type
+        data_out.loc[len(data_out)+1]=[nBlock, key_response.corr, key_response.rt, trial_type]
         data_out.to_csv(out_all_fn, index=False)
         #'data/%s_%s_%s' %(expInfo['participant'], expName, expInfo['date'])
     #build adaptive rt design.
@@ -740,9 +713,22 @@ data_lags = pd.DataFrame(columns = lag_names)
 sum_names = ['block', 'accuracy', 'rt_all', 'rt_cor']
 data_summary = pd.DataFrame(columns = (sum_names))
 
+win.close()
+core.quit()
+
 skip_index = 32
 max_lags = 31
+
+print 'I am here'
 for i in np.unique(data_out[['block']]):
+    #make a plot of the response times vs trial and plot by type save with subject's id.
+    data_out['trial'] = np.array(range(1,len(data_out)+1))
+    sns.set_context("paper")
+    plt.figure(figsize=(8, 6))
+    sns.lmplot('trial', 'rt', hue = 'type', data=data_out, fit_reg=False)
+    plt.savefig('test.png')
+
+
     block_df = data_out.loc[data_out['block']==i]
     mean_acc = block_df[['response']].mean()
     rt_all = block_df[['rt']].mean()
@@ -758,7 +744,7 @@ for i in np.unique(data_out[['block']]):
     y = np.array(good_trials['rt'])
     x = np.linspace(1,y.size,y.size)
     x = np.vstack([x,np.ones(len(x))]).T
-    result = sm.OLS( y, x ).fit()
+    result = sm.OLS(y, x).fit()
     R = result.resid
 
     #calculate autocorrelation and plot if desired:
@@ -773,5 +759,3 @@ for i in np.unique(data_out[['block']]):
 data_summary = pd.merge(data_summary, data_lags, left_on = 'block', right_on='lag1',left_index = True,right_index = True, how= 'outer')
 data_summary.to_csv(out_sum_fn, index=False)
 data_out.to_csv(out_all_fn, index=False)
-win.close()
-core.quit()
