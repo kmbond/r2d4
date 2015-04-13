@@ -32,8 +32,8 @@ filename = _thisDir + os.sep + 'data/%s_%s_%s' %(expInfo['participant'], expName
 
 
 # Output summary data and analyzed files
-out_sum_fn =  _thisDir + os.sep +'data/summary_%s_%s_%s.csv' %(expInfo['participant'], expName, expInfo['date'])
-out_all_fn =  _thisDir + os.sep +'data/all_data_%s_%s_%s.csv' %(expInfo['participant'], expName, expInfo['date'])
+out_sum_fn =  _thisDir + os.sep +'data/%s_summary_%s_%s.csv' %(expInfo['participant'], expName, expInfo['date'])
+out_all_fn =  _thisDir + os.sep +'data/%s_all_data_%s_%s.csv' %(expInfo['participant'], expName, expInfo['date'])
 
 data_out = pd.DataFrame(columns=('block','response','rt', 'type'))
 
@@ -53,12 +53,10 @@ endExpNow = False  # flag for 'escape' or other condition => quit the exp
 # Start Code - component code to be run before the window creation
 
 # Setup the Window
-win = visual.Window(size=[400,400], fullscr=False, screen=0, allowGUI=True, allowStencil=False,
+win = visual.Window(size=[400,400], fullscr=True, screen=0, allowGUI=True, allowStencil=False,
     monitor='testMonitor', color=[-1,-1,-1], colorSpace='rgb',
     blendMode='avg', useFBO=True
     )
-#No context
-#context = visual.Rect(win, width=1, height=1, autoDraw = True, lineColor='black', lineWidth = 6)
 
 # store frame rate of monitor if we can measure it successfully
 expInfo['frameRate']=win.getActualFrameRate()
@@ -105,8 +103,12 @@ practiceFeedback = visual.TextStim(win=win, ori=0, name='text_4',
 #     depth=-6.0)
 
 
-Wrong_1 = visual.Circle(win=win, units = 'pix', radius = 100,lineColor='red', fillColor = 'red')
-
+#Wrong_1 = visual.Circle(win=win, units = 'pix', radius = 100,lineColor='red', fillColor = 'red')
+Wrong_1 = visual.TextStim(win=win, ori=0, name='Right_1',
+    text='X',    font='Arial',
+    pos=[0, 0], height=.5, wrapWidth=None,
+    color='red', colorSpace='rgb', opacity=1,
+    depth=-6.0)
 
 
 # Initialize components for Routine "Begin_Blocks"
@@ -491,8 +493,6 @@ for thisBlock_Loop in Block_Loop:
             event.clearEvents(eventType='keyboard')
             theseKeys = event.waitKeys(max_rt,('h','j','k','l'), timeStamped = RTclock)
 
-
-
             if theseKeys is None:
                 key_response.corr = 0
                 key_response.keys=None
@@ -529,9 +529,6 @@ for thisBlock_Loop in Block_Loop:
             if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
                 win.flip()
 
-
-
-
         # store data for trials (TrialHandler)
         trials.addData('key_response.keys',key_response.keys)
         trials.addData('key_response.corr', key_response.corr)
@@ -547,8 +544,10 @@ for thisBlock_Loop in Block_Loop:
             trial_type = 1
         elif nBlock in [2,4,5,7]:
             trial_type = 2
-
-        print nBlock, key_response.corr, key_response.rt, trial_type
+        #ocasionally key is
+        if not key_response.rt:
+            key_response.rt = float('nan')
+        #add data to file
         data_out.loc[len(data_out)+1]=[nBlock, key_response.corr, key_response.rt, trial_type]
         data_out.to_csv(out_all_fn, index=False)
         #'data/%s_%s_%s' %(expInfo['participant'], expName, expInfo['date'])
@@ -714,12 +713,12 @@ sum_names = ['block', 'accuracy', 'rt_all', 'rt_cor']
 data_summary = pd.DataFrame(columns = (sum_names))
 
 win.close()
-core.quit()
 
 skip_index = 32
 max_lags = 31
+plot_fn =  _thisDir + os.sep +'data/rt_plot%s_%s_%s.png' %(expInfo['participant'], expName, expInfo['date'])
 
-print 'I am here'
+
 for i in np.unique(data_out[['block']]):
     #make a plot of the response times vs trial and plot by type save with subject's id.
     data_out['trial'] = np.array(range(1,len(data_out)+1))
@@ -727,7 +726,6 @@ for i in np.unique(data_out[['block']]):
     plt.figure(figsize=(8, 6))
     sns.lmplot('trial', 'rt', hue = 'type', data=data_out, fit_reg=False)
     plt.savefig('test.png')
-
 
     block_df = data_out.loc[data_out['block']==i]
     mean_acc = block_df[['response']].mean()
@@ -759,3 +757,4 @@ for i in np.unique(data_out[['block']]):
 data_summary = pd.merge(data_summary, data_lags, left_on = 'block', right_on='lag1',left_index = True,right_index = True, how= 'outer')
 data_summary.to_csv(out_sum_fn, index=False)
 data_out.to_csv(out_all_fn, index=False)
+core.quit()
