@@ -18,7 +18,7 @@ _thisDir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(_thisDir)
 
 # Store info about the experiment session
-expName = u'test_mri'  # from the Builder filename that created this script
+expName = u'r2d4_MM'  # from the Builder filename that created this script
 expInfo = {'participant':'', 'session':''}
 dlg = gui.DlgFromDict(dictionary=expInfo, title=expName)
 if dlg.OK == False: core.quit()  # user pressed cancel
@@ -149,7 +149,6 @@ while not isDone:
         vec = vec + [t_vec[t]] +  np.repeat(0,iti_vec[t]).tolist()
     vec = vec + [0,0,0]
     dfStims = pd.DataFrame()
-
     X = np.zeros((len(vec),len(trial_types)))
     ons = np.zeros((12,4))
     for c in trial_types:
@@ -174,15 +173,20 @@ for x in range(0,len(vec)):
     elif vec[x] != 0:
         sequence_img_ids.append(img_dict[vec[x]])
 
+id_vec = vec
+t_vec = range(0,480,2)
+print t_vec
+print id_vec
 dfStims['trial_img'] = sequence_img_ids
 dfStims['trial_ans'] = vec
+
 
 
 #######################
 ## End Set up onsets ##
 #######################
 
-filename = _thisDir + os.sep + 'data/%s_%s_MRI_Onsets_%s' %(expInfo['participant'], expName, expInfo['session'])
+filename = _thisDir + os.sep + 'data/%s_%s_MRI_Onsets_%s.csv' %(expInfo['participant'], expName, expInfo['session'])
 np.savetxt(filename, ons, '%5.2f',delimiter=",")
 dfStims.to_csv('MRI_onsets.csv', index= False)
 
@@ -230,7 +234,7 @@ for thisComponent in InstructionsComponents:
 # set up handler to look after randomisation of conditions etc
 trials = data.TrialHandler(nReps=1, method='sequential',
     extraInfo=expInfo, originPath=None,
-    trialList=data.importConditions(u'/Users/plb/r2d4/MRI_onsets.csv'),
+    trialList=data.importConditions(u'MRI_onsets.csv'),
     seed=None, name='trials')
 
 
@@ -240,35 +244,55 @@ thisTrial = trials.trialList[0]  # so we can initialise stimuli with some values
 if thisTrial != None:
     for paramName in thisTrial.keys():
         exec(paramName + '= thisTrial.' + paramName)
+RTclock = core.Clock()
+max_rt = 1
 
+##### Wait for scanner trigger key #####
+event.clearEvents(eventType='keyboard')
+
+isHolding = 1
+while isHolding:
+    ScannerKey = event.waitKeys(keyList=['t'])
+    if ScannerKey[0] == 't':
+        isHolding=0
+globalClock.reset()  # to track the time since experiment started
+
+
+trial = -1
 for thisTrial in trials:
+    trial = trial+1
 
-    ##### Wait for scanner trigger key #####
-    #event.waitKeys(keyList=['t'])
     currentLoop = trials
     # abbreviate parameter names if possible (e.g. rgb = thisTrial.rgb)
     if thisTrial != None:
         for paramName in thisTrial.keys():
             exec(paramName + '= thisTrial.' + paramName)
 
+    fixation.setAutoDraw(True)
+    win.flip()
 
-    ##### Wait for scanner trigger key #####
-    event.waitKeys(keyList=['t'])
+
+
     #------Prepare to start Routine "trial"-------
     t = 0
     trialClock.reset()  # clock
     frameN = -1
     routineTimer.add(2.000000)
+    print globalClock.getTime()
+    print t_vec[trial]
     # update component parameters for each repeat
+    while globalClock.getTime() < t_vec[trial]:
+        core.wait(.001)
+
     if trial_img != 'image_folder/skip.png':
         image.setImage(trial_img)
-        key_resp_2 = event.BuilderKeyResponse()  # create an object of type KeyResponse
-        key_resp_2.status = NOT_STARTED
+        key_response = event.BuilderKeyResponse()  # create an object of type KeyResponse
+        key_response.status = NOT_STARTED
         # keep track of which components have finished
         trialComponents = []
         trialComponents.append(ISI)
         trialComponents.append(image)
-        trialComponents.append(key_resp_2)
+        trialComponents.append(key_response)
         trialComponents.append(Wrong_1)
         trialComponents.append(fixation)
 
@@ -278,95 +302,68 @@ for thisTrial in trials:
 
         #-------Start Routine "trial"-------
         continueRoutine = True
-        while continueRoutine and routineTimer.getTime() > 0:
+        while continueRoutine and t < 1:
+            print globalClock.getTime()
             # get current time
+            print "I am here"
             t = trialClock.getTime()
             frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
             # update/draw components on each frame
-            fixation.setAutoDraw(True)
+            # *image_2* updates
+
+            image.setAutoDraw(True)
             win.flip()
-            # *image* updates
-            if t >= .5 and image.status == NOT_STARTED:
-                # keep track of start time/frame for later
-                image.tStart = t  # underestimates by a little under one frame
-                image.frameNStart = frameN  # exact frame index
-                image.setAutoDraw(True)
-            if image.status == STARTED and t >= (.5 + (1.5-win.monitorFramePeriod*0.75)): #most of one frame period left
-                image.setAutoDraw(False)
+            RTclock.reset()
+            event.clearEvents(eventType='keyboard')
+            theseKeys = event.waitKeys(max_rt,('h','j','k','l'), timeStamped = RTclock)
+            if theseKeys is None:
+                key_response.corr = 0
+                key_response.keys=None
+                key_response.rt = float('nan')
+                continueRoutine=True
 
-            # *key_resp_2* updates
-            if t >= .5 and key_resp_2.status == NOT_STARTED:
-                # keep track of start time/frame for later
-                key_resp_2.tStart = t  # underestimates by a little under one frame
-                key_resp_2.frameNStart = frameN  # exact frame index
-                key_resp_2.status = STARTED
-                # keyboard checking is just starting
-                key_resp_2.clock.reset()  # now t=0
-                event.clearEvents(eventType='keyboard')
-            if key_resp_2.status == STARTED and t >= (.5 + (1.5-win.monitorFramePeriod*0.75)): #most of one frame period left
-                key_resp_2.status = STOPPED
-            if key_resp_2.status == STARTED:
-                theseKeys = event.getKeys(keyList=['2', '3', '4', '5'])
+            elif(len(theseKeys[0]) > 0):
+                key_response.keys = theseKeys[0][0]  # just the last key pressed
+                key_response.rt = theseKeys[0][1]
+                # was this 'correct'?
+                if (key_response.keys == str(trial_ans)) or (key_response.keys == trial_ans ):
+                    key_response.corr = 1
 
-                # check for quit:
-                if "escape" in theseKeys:
-                    endExpNow = True
-                if len(theseKeys) > 0:  # at least one key was pressed
-                    key_resp_2.keys = theseKeys[-1]  # just the last key pressed
-                    key_resp_2.rt = key_resp_2.clock.getTime()
-                    # was this 'correct'?
-                    if (key_resp_2.keys == str(trial_ans)) or (key_resp_2.keys == trial_ans):
-                        key_resp_2.corr = 1
-                    else:
-                        key_resp_2.corr = 0
-            # *ISI* period
-            if t >= 0.0 and ISI.status == NOT_STARTED:
-                # keep track of start time/frame for later
-                ISI.tStart = t  # underestimates by a little under one frame
-                ISI.frameNStart = frameN  # exact frame index
-                ISI.start(0.5)
-            elif ISI.status == STARTED: #one frame should pass before updating params and completing
-                ISI.complete() #finish the static period
+                else:
+                    key_response.corr = 0
+                continueRoutine = True
 
-            # check if all components have finished
-            if not continueRoutine:  # a component has requested a forced-end of Routine
-                break
-            continueRoutine = False  # will revert to True if at least one component still running
             for thisComponent in trialComponents:
-                if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
-                    continueRoutine = True
-                    break  # at least one component has not yet finished
+                if hasattr(thisComponent, "setAutoDraw"):
+                    thisComponent.setAutoDraw(False)
+                    win.flip()
 
-            # check for quit (the Esc key)
             if endExpNow or event.getKeys(keyList=["escape"]):
                 core.quit()
 
             # refresh the screen
             if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
                 win.flip()
-
         #-------Ending Routine "trial"-------
         for thisComponent in trialComponents:
             if hasattr(thisComponent, "setAutoDraw"):
                 thisComponent.setAutoDraw(False)
         # check responses
-        if key_resp_2.keys in ['', [], None]:  # No response was made
-           key_resp_2.keys=None
+        if key_response.keys in ['', [], None]:  # No response was made
+           key_response.keys=None
            # was no response the correct answer?!
-           if str(trial_ans).lower() == 'none': key_resp_2.corr = 1  # correct non-response
-           else: key_resp_2.corr = 0  # failed to respond (incorrectly)
+           if str(trial_ans).lower() == 'none': key_response.corr = 1  # correct non-response
+           else: key_response.corr = 0  # failed to respond (incorrectly)
         # store data for trials (TrialHandler)
-        trials.addData('key_resp_2.keys',key_resp_2.keys)
-        trials.addData('key_resp_2.corr', key_resp_2.corr)
-        if key_resp_2.keys != None:  # we had a response
-            trials.addData('key_resp_2.rt', key_resp_2.rt)
+        trials.addData('key_response.keys',key_response.keys)
+        trials.addData('key_response.corr', key_response.corr)
+        if key_response.keys != None:  # we had a response
+            trials.addData('key_response.rt', key_response.rt)
         thisExp.nextEntry()
         win.flip()
     elif trial_img == 'image_folder/skip.png':
         fixation.setAutoDraw(True)
-        win.flip()
         core.wait(0.5)
-        win.flip
     thisExp.nextEntry()
 
 
