@@ -154,7 +154,7 @@ while not isDone:
     for c in trial_types:
         a = np.where(vec==c)[0]
 
-        ons[:,c-2] = a +1
+        ons[:,c-2] = a*2
         for indx in range(0, len(a)):
             name = a[indx]
             X[a[indx]][c-2]= 1
@@ -274,8 +274,7 @@ for thisTrial in trials:
 
 
     #------Prepare to start Routine "trial"-------
-    t = 0
-    trialClock.reset()  # clock
+
     frameN = -1
     routineTimer.add(2.000000)
     print globalClock.getTime()
@@ -283,6 +282,9 @@ for thisTrial in trials:
     # update component parameters for each repeat
     while globalClock.getTime() < t_vec[trial]:
         core.wait(.001)
+        if endExpNow or event.getKeys(keyList=["escape"]):
+            core.quit()
+
 
     if trial_img != 'image_folder/skip.png':
         image.setImage(trial_img)
@@ -290,11 +292,8 @@ for thisTrial in trials:
         key_response.status = NOT_STARTED
         # keep track of which components have finished
         trialComponents = []
-        trialComponents.append(ISI)
         trialComponents.append(image)
         trialComponents.append(key_response)
-        trialComponents.append(Wrong_1)
-        trialComponents.append(fixation)
 
         for thisComponent in trialComponents:
             if hasattr(thisComponent, 'status'):
@@ -302,42 +301,58 @@ for thisTrial in trials:
 
         #-------Start Routine "trial"-------
         continueRoutine = True
-        while continueRoutine and t < 1:
-            print globalClock.getTime()
-            # get current time
-            print "I am here"
+        trialClock.reset()  # clock
+        print routineTimer.getTime()
+        while continueRoutine:
+                   # get current me
             t = trialClock.getTime()
             frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
             # update/draw components on each frame
-            # *image_2* updates
 
-            image.setAutoDraw(True)
-            win.flip()
-            RTclock.reset()
-            event.clearEvents(eventType='keyboard')
-            theseKeys = event.waitKeys(max_rt,('h','j','k','l'), timeStamped = RTclock)
-            if theseKeys is None:
-                key_response.corr = 0
-                key_response.keys=None
-                key_response.rt = float('nan')
-                continueRoutine=True
+            # *image* updates
+            if t >= 0.0 and image.status == NOT_STARTED:
+                # keep track of start time/frame for later
+                image.tStart = t  # underestimates by a little under one frame
+                image.frameNStart = frameN  # exact frame index
+                image.setAutoDraw(True)
+                print "current time is :", t
+                print "win.monitorFramePerior ", win.monitorFramePeriod
+            if image.status == STARTED and t >= (0.0 + (1.0-win.monitorFramePeriod*0.75)): #most of one frame period left
+                image.setAutoDraw(False)
+                continueRoutine = False
+            # *key_response* updates
+            if t >= 0.0 and key_response.status == NOT_STARTED:
+                # keep track of start time/frame for later
+                key_response.tStart = t  # underestimates by a little under one frame
+                key_response.frameNStart = frameN  # exact frame index
+                key_response.status = STARTED
+                # keyboard checking is just starting
+                key_response.clock.reset()  # now t=0
+                event.clearEvents(eventType='keyboard')
+            if key_response.status == STARTED and t >= (0.0 + (1-win.monitorFramePeriod*0.75)): #most of one frame period left
+                key_response.status = STOPPED
+                continueRoutine = False
+            if key_response.status == STARTED:
+                theseKeys = event.getKeys(keyList=['2', '3', '4', '5'])
 
-            elif(len(theseKeys[0]) > 0):
-                key_response.keys = theseKeys[0][0]  # just the last key pressed
-                key_response.rt = theseKeys[0][1]
-                # was this 'correct'?
-                if (key_response.keys == str(trial_ans)) or (key_response.keys == trial_ans ):
-                    key_response.corr = 1
-
-                else:
-                    key_response.corr = 0
-                continueRoutine = True
+                # check for quit:
+                if "escape" in theseKeys:
+                    endExpNow = True
+                if len(theseKeys) > 0:  # at least one key was pressed
+                    key_response.keys.extend(theseKeys)  # storing all keys
+                    key_response.rt.append(key_response.clock.getTime())
+                    print key_response
+                    print key_response.keys
+            # check if all components have finished
+            if not continueRoutine:  # a component has requested a forced-end of Routine
+                break
 
             for thisComponent in trialComponents:
-                if hasattr(thisComponent, "setAutoDraw"):
-                    thisComponent.setAutoDraw(False)
-                    win.flip()
+                if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
+                    continueRoutine = True
+                    break  # at least one component has not yet finished
 
+            # check for quit (the Esc key)
             if endExpNow or event.getKeys(keyList=["escape"]):
                 core.quit()
 
@@ -367,7 +382,7 @@ for thisTrial in trials:
     thisExp.nextEntry()
 
 
-# completed 1 repeats of 'trials'
+# completed all trials
 
 
 #------Prepare to start Routine "End"-------
