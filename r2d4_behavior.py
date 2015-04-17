@@ -413,7 +413,7 @@ routineTimer.reset()
 # set up handler to look after randomisation of conditions etc
 Block_Loop = data.TrialHandler(nReps=1, method='sequential',
     extraInfo=expInfo, originPath=None,
-    trialList=data.importConditions(u'block_loop.csv'),
+    trialList=data.importConditions(u'behavior_blocks.csv'),
     seed=None, name='Block_Loop')
 thisExp.addLoop(Block_Loop)  # add the loop to the experiment
 thisBlock_Loop = Block_Loop.trialList[0]  # so we can initialise stimuli with some values
