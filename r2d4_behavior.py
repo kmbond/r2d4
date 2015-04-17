@@ -724,8 +724,11 @@ for i in np.unique(data_out[['block']]):
     data_out['trial'] = np.array(range(1,len(data_out)+1))
     sns.set_context("paper")
     plt.figure(figsize=(8, 6))
+    axvline(x=np.unique(data_out[['block']]),color='k',ls='dashed')
     sns.lmplot('trial', 'rt', hue = 'type', data=data_out, fit_reg=False)
-    plt.savefig('test.png')
+    plt.axis([0, 2000, 0, 1.2])
+    plt.savefig(plot_fn)
+
 
     block_df = data_out.loc[data_out['block']==i]
     mean_acc = block_df[['response']].mean()
