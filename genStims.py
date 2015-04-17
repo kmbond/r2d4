@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 img_dict = {2: 'image_folder/stim_2.png', 3: 'image_folder/stim_3.png', 4: 'image_folder/stim_4.png', 5: 'image_folder/stim_5.png'}
 key_dict = {2:'h', 3:'j', 4:'k', 5:'l'}#key mapping
-length = 32 # number of trials within a  block should be 256
+length = 256 # number of trials within a  block should be 256
 dfStims = pd.DataFrame()
 block_ids = [1, 1, 2, 2, 2, 1, 2] #1 is random #2 is sequence
 
@@ -34,7 +34,7 @@ def genSequence(length):
     sequence_stims = sequence_stims[rota_ind:]  + sequence_stims[:rota_ind]
     sequence_img_ids = []
     sequence_ans = []
-    sequence_stims= np.tile(sequence_stims,1)
+    sequence_stims= np.tile(sequence_stims,8)
     for x in range(0,length):
         sequence_img_ids.append(img_dict[sequence_stims[x]])
         sequence_ans.append(key_dict[sequence_stims[x]])
@@ -50,4 +50,4 @@ for type in range(0,len(block_ids)):
         dfStims['block_'+str(type+1)+'_img'] = img_ids
         dfStims['block_'+str(type+1)+'_ans'] = seq_ans
 
-dfStims.to_csv('stimuli.csv', index= False)
+dfStims.to_csv('behavior_stimuli.csv', index= False)
