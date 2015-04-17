@@ -438,7 +438,7 @@ for thisBlock_Loop in Block_Loop:
     # set up handler to look after randomisation of conditions etc
     trials = data.TrialHandler(nReps=1, method='sequential',
         extraInfo=expInfo, originPath=None,
-        trialList=data.importConditions(u'stimuli.csv'),
+        trialList=data.importConditions(u'behavior_stimuli.csv'),
         seed=None, name='trials')
     thisExp.addLoop(trials)  # add the loop to the experiment
     thisTrial = trials.trialList[0]  # so we can initialise stimuli with some values
