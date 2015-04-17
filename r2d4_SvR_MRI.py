@@ -29,17 +29,8 @@ expInfo['expName'] = expName
 
 # Data file name stem = absolute path + name; later add .psyexp, .csv, .log, etc
 filename = _thisDir + os.sep + 'data/%s_%s_%s' %(expInfo['participant'], expName, expInfo['date'])
-
-out_all_fn =  _thisDir + os.sep + 'data/%s_%s_SvR_ons_%s.csv' %(expInfo['participant'], expName, expInfo['session'])
-data_out = pd.DataFrame(columns=('Onset_Time','Keys_Pressed','rt'))
-
-
 # Output summary data and analyzed files
-out_sum_fn =  _thisDir + os.sep +'data/%s_summary_%s_%s.csv' %(expInfo['participant'], expName, expInfo['date'])
-out_all_fn =  _thisDir + os.sep +'data/%s_all_data_%s_%s.csv' %(expInfo['participant'], expName, expInfo['date'])
-
-data_out = pd.DataFrame(columns=('block','onset_Time','Trial_Type'))
-
+out_all_fn =  _thisDir + os.sep + 'data/%s_%s_%s.csv' %(expInfo['participant'], expName, expInfo['session'])
 
 # An ExperimentHandler isn't essential but helps with data saving
 thisExp = data.ExperimentHandler(name=expName, version='',
