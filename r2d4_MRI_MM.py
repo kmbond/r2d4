@@ -28,6 +28,10 @@ expInfo['expName'] = expName
 # Data file name stem = absolute path + name; later add .psyexp, .csv, .log, etc
 filename = _thisDir + os.sep + 'data/%s_%s_%s' %(expInfo['participant'], expName, expInfo['date'])
 
+out_all_fn =  _thisDir + os.sep + 'data/%s_%s_MM_ons_%s.csv' %(expInfo['participant'], expName, expInfo['session'])
+data_out = pd.DataFrame(columns=('Onset_Time','Keys_Pressed','rt'))
+
+
 # An ExperimentHandler isn't essential but helps with data saving
 thisExp = data.ExperimentHandler(name=expName, version='',
     extraInfo=expInfo, runtimeInfo=None,
@@ -315,8 +319,7 @@ for thisTrial in trials:
                 image.tStart = t  # underestimates by a little under one frame
                 image.frameNStart = frameN  # exact frame index
                 image.setAutoDraw(True)
-                print "current time is :", t
-                print "win.monitorFramePerior ", win.monitorFramePeriod
+                onsetTime = globalClock.getTime()
             if image.status == STARTED and t >= (0.0 + (1.0-win.monitorFramePeriod*0.75)): #most of one frame period left
                 image.setAutoDraw(False)
                 continueRoutine = False
@@ -376,6 +379,12 @@ for thisTrial in trials:
             trials.addData('key_response.rt', key_response.rt)
         thisExp.nextEntry()
         win.flip()
+        #Save Data to output File
+
+
+        data_out.loc[len(data_out)+1]=[onsetTime,trial_ans, str(key_response.keys).strip('[]')]
+        data_out.to_csv(out_all_fn, index=False)
+
     elif trial_img == 'image_folder/skip.png':
         fixation.setAutoDraw(True)
         core.wait(0.5)
