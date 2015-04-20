@@ -16,7 +16,7 @@
 # To conduct the experiment. 
 1. cd into the directory containing the experimental scripts. 
 
-2. The stimuli for each of the event related (r2d4_MM_MRI) and block design (r2d4_SvR_MRI) and behavioral tests (r2d4_behavior) will be generated automatically for each subject when executing the file.
+2. The stimuli for each of the event related (r2d4_MM_MRI) and block design (r2d4_SvR_MRI) and behavioral tests (r2d4_behavior) will be generated automatically for each subject when executing that script. Onsets will be saved in the data/ directory.
 
 3. Each of these scripts will generate a 4 data objects, correpsonding to the all of the output data (log), summary data (summary), onsets, and plots.  
 
