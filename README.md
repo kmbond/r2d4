@@ -1,12 +1,12 @@
-# Before executing r2d4.py
-1. To run these scripts, the user must have a working version of psychopy installed. It is recommended (and required on coax lab machines running ubuntu) to install psychopy and its dependencies in a virtual environment. To set up the virtual environment correctly, follow these instructions in this order. It is not necessary to install psychopy's builder app to use these scripts. 
-2. If using ubuntu, download and install anaconda (http://continuum.io/downloads), [bash Anaconda.sh]
+# Before attempting to run these programs, it is recommended to install psychopy and python in a virtual environment. 
+1. To run these scripts, the user must have a working version of psychopy installed. It is recommended (and essential on coax lab machines running ubuntu) to install psychopy and its dependencies in a virtual environment. To set up the virtual environment correctly, follow these instructions in this order. It is not necessary to install psychopy's gui to run these scripts.
+2. Download and install anaconda (http://continuum.io/downloads), [bash Anaconda.sh]
 3. On coax lab machines, choose the home directory for the install location (home/coaxlab/anaconda). 
-4. conda install pip
-5. Then install psyhopy (pip install psychopy) 
-6. If you do not have pyglet installed, install by typing (pip install pyglet)
-7. Install wxpython (conda install wxpython), and pip install seaborn. 
-8. You may be missing additional dependencies which you will discover when executing r2d4_pilot.py.
+4. Install pip, (conda install pip)
+5. Install psyhopy (pip install psychopy) 
+6. Install pyglet (pip install pyglet)
+7. Install wxpython (conda install wxpython), and seaboorn, pip install seaborn. 
+8. Depending on your python environment, you may be need to install additional dependencies which you will discover when executing r2d4_behavior.py or the MRI experiments.
 
 # To conduct the experiment. 
 cd into the directory containing the experimental scripts. 
