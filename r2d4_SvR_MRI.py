@@ -20,8 +20,8 @@ _thisDir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(_thisDir)
 
 # Store info about the experiment session
-expName = 'r2d4_SvR'  # from the Builder filename that created this script
-expInfo = {u'session': u'', u'participant': u''}
+expName = u'r2d4_SvR'  # from the Builder filename that created this script
+expInfo = {'participant':u'', 'session':u''}
 dlg = gui.DlgFromDict(dictionary=expInfo, title=expName)
 if dlg.OK == False: core.quit()  # user pressed cancel
 expInfo['date'] = data.getDateStr()  # add a simple timestamp
@@ -30,7 +30,11 @@ expInfo['expName'] = expName
 # Data file name stem = absolute path + name; later add .psyexp, .csv, .log, etc
 filename = _thisDir + os.sep + 'data/%s_%s_%s' %(expInfo['participant'], expName, expInfo['date'])
 # Output summary data and analyzed files
-out_all_fn =  _thisDir + os.sep + 'data/%s_%s_%s.csv' %(expInfo['participant'], expName, expInfo['session'])
+out_all_fn =  _thisDir + os.sep + 'data/%s_%s_data_%s.csv' %(expInfo['participant'], expName, expInfo['session'])
+#onset filename
+ons_fn = _thisDir + os.sep + 'data/%s_%s_Onsets_%s' %(expInfo['participant'], expName,expInfo['session'])
+
+data_out = pd.DataFrame(columns=('Block_n','Onset_Time','Block_ID'))
 
 # An ExperimentHandler isn't essential but helps with data saving
 thisExp = data.ExperimentHandler(name=expName, version='',
@@ -47,7 +51,7 @@ endExpNow = False  # flag for 'escape' or other condition => quit the exp
 # Start Code - component code to be run before the window creation
 
 # Setup the Window
-win = visual.Window(size=[400,400], fullscr=False, screen=0, allowGUI=True, allowStencil=False,
+win = visual.Window(size=[500,500], fullscr=False, screen=0, allowGUI=True, allowStencil=False,
     monitor='testMonitor', color=[-1,-1,-1], colorSpace='rgb',
     blendMode='avg', useFBO=True
     )
@@ -65,14 +69,12 @@ else:
 # Initialize components for Routine "Instructions"
 InstructionsClock = core.Clock()
 instrText = visual.TextStim(win=win, ori=0, name='instrText',
-    text=u'Experiment will being in 5 seconds\n',    font=u'Arial',
+    text=u'The experiment is about to begin. ',    font=u'Arial',
     pos=[0, 0], height=0.1, wrapWidth=None,
     color=u'white', colorSpace='rgb', opacity=1,
     depth=0.0)
 
 # Initialize components for Routine "practice"
-practiceClock = core.Clock()
-
 image = visual.ImageStim(win=win, name='image', units='pix',
     image='sin', mask=None,
     ori=0, pos=[0, 0], size=[200,200],
@@ -80,20 +82,11 @@ image = visual.ImageStim(win=win, name='image', units='pix',
     flipHoriz=False, flipVert=False,
     texRes=128, interpolate=True, depth=0.0)
 
-
 fixation = visual.ShapeStim(win,
     vertices=((0, -0.2), (0, 0.2), (0,0), (-0.2,0), (0.2, 0)),
     lineWidth=5,
     closeShape=False,
     lineColor='white')
-
-# This feedback puts a small red x underneath the stimulus
-# Right_1 = visual.TextStim(win=win, ori=0, name='Right_1',
-#     text='X',    font='Arial',
-#     pos=[0, -.3], height=0.1, wrapWidth=None,
-#     color='green', colorSpace='rgb', opacity=1,
-#     depth=-6.0)
-
 
 Wrong_1 = visual.Circle(win=win, units = 'pix', radius = 100,lineColor='red', fillColor = 'red')
 # Wrong_1 = visual.TextStim(win=win, ori=0, name='Right_1',
@@ -105,11 +98,7 @@ Wrong_1 = visual.Circle(win=win, units = 'pix', radius = 100,lineColor='red', fi
 
 # Initialize components for Routine "Begin_Blocks"
 Begin_BlocksClock = core.Clock()
-text_3 = visual.TextStim(win=win, ori=0, name='text_3',
-    text=u'End of practice rounds. Press any key to continue. ',    font=u'Arial',
-    pos=[0, 0], height=0.1, wrapWidth=None,
-    color=u'white', colorSpace='rgb', opacity=1,
-    depth=0.0)
+
 
 # Initialize components for Routine "Block"
 BlockClock = core.Clock()
@@ -122,18 +111,11 @@ image_2 = visual.ImageStim(win=win, name='image_2',units='pix',
 
 # Initialize components for Routine "Feedback"
 FeedbackClock = core.Clock()
-#initialize n_corr and mean_Rt
-
-text_2 = visual.TextStim(win=win, ori=0, name='text_2',
-    text='',    font=u'Arial',
-    pos=[0, 0], height=0.1, wrapWidth=None,
-    color=u'white', colorSpace='rgb', opacity=1,
-    depth=0.0)
 
 # Initialize components for Routine "End_Experiment"
 End_ExperimentClock = core.Clock()
 text = visual.TextStim(win=win, ori=0, name='text',
-    text=u'Experiment is completed. Thank you for your participation.\n',    font=u'Arial',
+    text=u'Experiment is completed. Thank you for your participation.',    font=u'Arial',
     pos=[0, 0], height=0.1, wrapWidth=None,
     color=u'white', colorSpace='rgb', opacity=1,
     depth=0.0)
@@ -149,6 +131,8 @@ t_vec =  t_vec[1::3]
 block_ids = np.array([[1,2]])
 block_ids = block_ids.repeat(8)
 shuffle(block_ids)
+ons = pd.DataFrame()
+
 
 
 #Generate Pseudo-Random Stimuli Ordering
@@ -194,8 +178,26 @@ for type in range(0,len(block_ids)):
         dfStims['block_'+str(type+1)+'_img'] = img_ids
         dfStims['block_'+str(type+1)+'_ans'] = seq_ans
 
-dfStims.to_csv('SvR_stims.csv', index= False)
 
+#Write Onsets to file
+t_vec[np.where(block_ids==1)]
+t_vec[np.where(block_ids==2)]
+ons[0] = t_vec[np.where(block_ids==1)]
+ons[1] = t_vec[np.where(block_ids==2)]
+
+np.savetxt(ons_fn, ons, '%5.2f',delimiter=",")
+
+
+dfStims.to_csv('SvR_onsets.csv', index= False)
+
+SvR_blocks = pd.DataFrame()
+block_id_names = ['block_'+ str(i) for i in  range(1,17)]
+block_id_names = [s + '_img' for s in block_id_names]
+block_ans_names = ['block_'+ str(i) for i in  range(1,17)]
+block_ans_names = [s + '_ans' for s in block_ans_names]
+SvR_blocks['Block_id'] = block_id_names
+SvR_blocks['Block_ans'] = block_ans_names
+SvR_blocks.to_csv('SvR_blocks.csv', index = False)
 
 # Create some handy timers
 globalClock = core.Clock()  # to track the time since experiment started
@@ -205,20 +207,19 @@ routineTimer = core.CountdownTimer()  # to track time remaining of each (non-sli
 t = 0
 InstructionsClock.reset()  # clock
 frameN = -1
+routineTimer.add(5.000000)
+
 # update component parameters for each repeat
-instructions_response = event.BuilderKeyResponse()  # create an object of type KeyResponse
-instructions_response.status = NOT_STARTED
 # keep track of which components have finished
 InstructionsComponents = []
 InstructionsComponents.append(instrText)
-InstructionsComponents.append(instructions_response)
 for thisComponent in InstructionsComponents:
     if hasattr(thisComponent, 'status'):
         thisComponent.status = NOT_STARTED
 
 #-------Start Routine "Instructions"-------
 continueRoutine = True
-while continueRoutine:
+while continueRoutine and routineTimer.getTime() > 0:
     # get current time
     t = InstructionsClock.getTime()
     frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
@@ -232,22 +233,8 @@ while continueRoutine:
         instrText.setAutoDraw(True)
 
     # *instructions_response* updates
-    if t >= 0.0 and instructions_response.status == NOT_STARTED:
-        # keep track of start time/frame for later
-        instructions_response.tStart = t  # underestimates by a little under one frame
-        instructions_response.frameNStart = frameN  # exact frame index
-        instructions_response.status = STARTED
-        # keyboard checking is just starting
-        event.clearEvents(eventType='keyboard')
-    if instructions_response.status == STARTED:
-        theseKeys = event.getKeys()
-
-        # check for quit:
-        if "escape" in theseKeys:
-            endExpNow = True
-        if len(theseKeys) > 0:  # at least one key was pressed
-            # a response ends the routine
-            continueRoutine = False
+    if instrText.status == STARTED and t >= (0.0 + (5-win.monitorFramePeriod*0.75)): #most of one frame period left
+        instrText.setAutoDraw(False)
 
     # check if all components have finished
     if not continueRoutine:  # a component has requested a forced-end of Routine
@@ -269,7 +256,7 @@ while continueRoutine:
 #check for forced end of rountine.
 if endExpNow or event.getKeys(keyList=["escape"]):
     core.quit()
-core.wait(5)
+
 
 
 #-------Ending Routine "Instructions"-------
@@ -281,14 +268,17 @@ routineTimer.reset()
 
 
 
-#Wait for scanner pulse:
+##### Wait for scanner trigger key #####
+event.clearEvents(eventType='keyboard')
+
 isHolding = 1
 while isHolding:
     ScannerKey = event.waitKeys(keyList=['t'])
     if ScannerKey[0] == 't':
         isHolding=0
-globalClock.reset()
-
+    if endExpNow or event.getKeys(keyList=["escape"]):
+        core.quit()
+globalClock.reset()  # to track the time since experiment started
 
 
 #------Prepare to start Routine "Begin_Blocks"-------
@@ -328,7 +318,7 @@ for thisBlock_Loop in Block_Loop:
     # set up handler to look after randomisation of conditions etc
     trials = data.TrialHandler(nReps=1, method='sequential',
         extraInfo=expInfo, originPath=None,
-        trialList=data.importConditions(u'SvR_stims.csv'),
+        trialList=data.importConditions(u'SvR_onsets.csv'),
         seed=None, name='trials')
     thisExp.addLoop(trials)  # add the loop to the experiment
     thisTrial = trials.trialList[0]  # so we can initialise stimuli with some values
