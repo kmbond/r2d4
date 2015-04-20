@@ -12,14 +12,13 @@ import statsmodels.formula.api as sm
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-
 # Ensure that relative paths start from the same directory as this script
 _thisDir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(_thisDir)
 
 # Store info about the experiment session
 expName = u'r2d4_MM'  # from the Builder filename that created this script
-expInfo = {'participant':'', 'session':''}
+expInfo = {'participant':u'', 'session':u''}
 dlg = gui.DlgFromDict(dictionary=expInfo, title=expName)
 if dlg.OK == False: core.quit()  # user pressed cancel
 expInfo['date'] = data.getDateStr()  # add a simple timestamp
@@ -28,7 +27,7 @@ expInfo['expName'] = expName
 # Data file name stem = absolute path + name; later add .psyexp, .csv, .log, etc
 filename = _thisDir + os.sep + 'data/%s_%s_%s' %(expInfo['participant'], expName, expInfo['date'])
 
-out_all_fn =  _thisDir + os.sep + 'data/%s_%s_MM_ons_%s.csv' %(expInfo['participant'], expName, expInfo['session'])
+out_all_fn =  _thisDir + os.sep + 'data/%s_%s_data_%s.csv' %(expInfo['participant'], expName, expInfo['session'])
 data_out = pd.DataFrame(columns=('Onset_Time','Keys_Pressed','rt'))
 
 
@@ -61,7 +60,7 @@ else:
 # Initialize components for Routine "Instructions"
 InstructionsClock = core.Clock()
 text_2 = visual.TextStim(win=win, ori=0, name='text_2',
-    text=u'The experiment will begin in 5 seconds. ',    font=u'Arial',
+    text=u'The experiment is about to begin. ',    font=u'Arial',
     pos=[0, 0], height=0.1, wrapWidth=None,
     color=u'white', colorSpace='rgb', opacity=1,
     depth=0.0)
@@ -82,41 +81,16 @@ fixation = visual.ShapeStim(win,
     closeShape=False,
     lineColor='white')
 
-Wrong_1 = visual.TextStim(win=win, ori=0, name='Right_1',
-    text='X',    font='Arial',
-    pos=[0, 0], height=.5, wrapWidth=None,
-    color='red', colorSpace='rgb', opacity=1,
-    depth=-6.0)
+Wrong_1 = visual.Circle(win=win, units = 'pix', radius = 100,lineColor='red', fillColor = 'red')
 
 
 # Initialize components for Routine "End"
 EndClock = core.Clock()
 text = visual.TextStim(win=win, ori=0, name='text',
-    text=u'End of Experiment',    font=u'Arial',
+    text=u'Experiment is completed. Thank you for your participation.',    font=u'Arial',
     pos=[0, 0], height=0.1, wrapWidth=None,
     color=u'white', colorSpace='rgb', opacity=1,
     depth=0.0)
-
-
-
-
-# Create some handy timers
-globalClock = core.Clock()  # to track the time since experiment started
-routineTimer = core.CountdownTimer()  # to track time remaining of each (non-slip) routine
-
-#------Prepare to start Routine "Instructions"-------
-t = 0
-InstructionsClock.reset()  # clock
-frameN = -1
-routineTimer.add(5.000000)
-# update component parameters for each repeat
-# keep track of which components have finished
-InstructionsComponents = []
-InstructionsComponents.append(text_2)
-for thisComponent in InstructionsComponents:
-    if hasattr(thisComponent, 'status'):
-        thisComponent.status = NOT_STARTED
-
 
 
 #######################
@@ -157,17 +131,14 @@ while not isDone:
     ons = np.zeros((12,4))
     for c in trial_types:
         a = np.where(vec==c)[0]
-
         ons[:,c-2] = a*2
         for indx in range(0, len(a)):
             name = a[indx]
             X[a[indx]][c-2]= 1
 
-
     df=pd.DataFrame(X)
     cxy = df.corr()
     cxy = abs(np.tril(cxy, k=-1))
-
     if cxy.max() < corr_thresh:
         isDone = 1
 
@@ -179,8 +150,6 @@ for x in range(0,len(vec)):
 
 id_vec = vec
 t_vec = range(0,480,2)
-print t_vec
-print id_vec
 dfStims['trial_img'] = sequence_img_ids
 dfStims['trial_ans'] = vec
 
@@ -190,10 +159,28 @@ dfStims['trial_ans'] = vec
 ## End Set up onsets ##
 #######################
 
-filename = _thisDir + os.sep + 'data/%s_%s_MRI_Onsets_%s.csv' %(expInfo['participant'], expName, expInfo['session'])
+filename = _thisDir + os.sep + 'data/%s_%s_Onsets_%s.csv' %(expInfo['participant'], expName, expInfo['session'])
 np.savetxt(filename, ons, '%5.2f',delimiter=",")
-dfStims.to_csv('MRI_onsets.csv', index= False)
+dfStims.to_csv('MM_onsets.csv', index= False)
 
+
+
+# Create some handy timers
+globalClock = core.Clock()  # to track the time since experiment started
+routineTimer = core.CountdownTimer()  # to track time remaining of each (non-slip) routine
+
+#------Prepare to start Routine "Instructions"-------
+t = 0
+InstructionsClock.reset()  # clock
+frameN = -1
+routineTimer.add(5.000000)
+# update component parameters for each repeat
+# keep track of which components have finished
+InstructionsComponents = []
+InstructionsComponents.append(text_2)
+for thisComponent in InstructionsComponents:
+    if hasattr(thisComponent, 'status'):
+        thisComponent.status = NOT_STARTED
 
 
 #-------Start Routine "Instructions"-------
@@ -238,7 +225,7 @@ for thisComponent in InstructionsComponents:
 # set up handler to look after randomisation of conditions etc
 trials = data.TrialHandler(nReps=1, method='sequential',
     extraInfo=expInfo, originPath=None,
-    trialList=data.importConditions(u'MRI_onsets.csv'),
+    trialList=data.importConditions(u'MM_onsets.csv'),
     seed=None, name='trials')
 
 
@@ -259,6 +246,8 @@ while isHolding:
     ScannerKey = event.waitKeys(keyList=['t'])
     if ScannerKey[0] == 't':
         isHolding=0
+    if endExpNow or event.getKeys(keyList=["escape"]):
+        core.quit()
 globalClock.reset()  # to track the time since experiment started
 
 
@@ -281,8 +270,10 @@ for thisTrial in trials:
 
     frameN = -1
     routineTimer.add(2.000000)
-    print globalClock.getTime()
-    print t_vec[trial]
+
+    #For Debugging
+    #print globalClock.getTime()
+    #print t_vec[trial]
     # update component parameters for each repeat
     while globalClock.getTime() < t_vec[trial]:
         core.wait(.001)
@@ -306,7 +297,9 @@ for thisTrial in trials:
         #-------Start Routine "trial"-------
         continueRoutine = True
         trialClock.reset()  # clock
-        print routineTimer.getTime()
+        # Print routTimer to verify matches correct onset timings.
+        # print routineTimer.getTime()
+
         while continueRoutine:
                    # get current me
             t = trialClock.getTime()
@@ -344,8 +337,6 @@ for thisTrial in trials:
                 if len(theseKeys) > 0:  # at least one key was pressed
                     key_response.keys.extend(theseKeys)  # storing all keys
                     key_response.rt.append(key_response.clock.getTime())
-                    print key_response
-                    print key_response.keys
             # check if all components have finished
             if not continueRoutine:  # a component has requested a forced-end of Routine
                 break
