@@ -153,7 +153,8 @@ t_vec = range(0,480,2)
 dfStims['trial_img'] = sequence_img_ids
 dfStims['trial_ans'] = vec
 
-
+print dfStims
+print t_vec
 
 #######################
 ## End Set up onsets ##
