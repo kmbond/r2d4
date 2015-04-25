@@ -1,19 +1,25 @@
-# Before executing r2d4.py
-1. To run these scripts, the user must have a working version of psychopy installed. It is recommended (and required on coax lab machines running ubuntu) to install psychopy and its dependencies in a virtual environment. To set up the virtual environment correctly, follow these instructions in this order. It is not necessary to install psychopy's builder app to use these scripts. 
-3. If using ubuntu, download and install anaconda (http://continuum.io/downloads), [bash Anaconda.sh]
-4. On coax lab machines, choose the home directory for the install location (home/coaxlab/anaconda). 
-5. conda install pip
-6. Then install psyhopy (pip install psychopy) 
-6. If you do not have pyglet installed, install by typing (pip install pyglet)
-7. Install wxpython (conda install wxpython)
-3. You may be missing additional dependencies which you will discover when executing r2d4_pilot.py.
+# Before running these programs:
+1. The user must have a working version of psychopy installed. It is recommended to install psychopy and its dependencies in a virtual environment. To set up the virtual environment correctly, follow these instructions in this order. It is not necessary to install psychopy's gui to run these scripts.
+
+2. Download and install anaconda (http://continuum.io/downloads), [bash Anaconda.sh]
+
+3. On coax lab machines, choose the home directory for the install location (home/coaxlab/anaconda). 
+
+4. Install additional dependencies:
+  a. Install pip, (conda install pip)
+  b. Install psyhopy (pip install psychopy) 
+  c. Install pyglet (pip install pyglet)
+  d. Install wxpython (conda install wxpython), and seaboorn, pip install seaborn. 
+
+5. Depending on your python environment, you may be need to install additional dependencies which you will discover when executing r2d4_behavior.py or the MRI experiments.
 
 # To conduct the experiment. 
-cd into the directory containing the experimental scripts. 
-1. Use genStims.py to generate random and sequence blocks of stimuli (in the terminal enter python genStims.py). These will be saved under stimuli.csv. genStims should be executed each time the user wants new stimuli, i.e. for a each new subject.
+1. cd into the directory containing the experimental scripts. 
 
-2. The order of random and sequence blocks can be modified by modifying the block_id vector in genStims.py. 1 corresponds to a random presentation of stimuli, 2 corresponds to the sequence presentation of stimuli. 
+2. The stimuli for each of the event related (r2d4_MM_MRI) and block design (r2d4_SvR_MRI) and behavioral tests (r2d4_behavior) will be generated automatically for each subject when executing that script. Onsets will be saved in the data/ directory.
 
-3. r2d4.py will generate a data folder, and save each subject's performance in that folder under three separate files.
+3. Each of these scripts will generate a 4 data objects, correpsonding to the all of the output data (log), summary data (summary), onsets, and plots.  
 
-4. N.B The user will be prompted to enter the subjects unique id and session number at the start of each experiment. 
+4. Encoding of blocks: 1:random, 2:sequence
+
+5. For the MRI experiments (MM and SvR), enter the Run number as the session number. 
