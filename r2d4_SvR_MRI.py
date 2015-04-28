@@ -30,11 +30,11 @@ expInfo['expName'] = expName
 # Data file name stem = absolute path + name; later add .psyexp, .csv, .log, etc
 filename = _thisDir + os.sep + 'data/%s_%s_%s' %(expInfo['participant'], expName, expInfo['date'])
 # Output summary data and analyzed files
-out_all_fn =  _thisDir + os.sep + 'data/%s_%s_data_%s.csv' %(expInfo['participant'], expName, expInfo['session'])
+out_all_fn =  _thisDir + os.sep + 'data/%s_%s_%s_responses.csv' %(expInfo['participant'], expName, expInfo['session'])
 #onset filename
-ons_fn = _thisDir + os.sep + 'data/%s_%s_Onsets_%s' %(expInfo['participant'], expName,expInfo['session'])
+ons_fn = _thisDir + os.sep + 'data/%s_%s_%s_onsets.csv' %(expInfo['participant'], expName,expInfo['session'])
 
-data_out = pd.DataFrame(columns=('Block_n','Onset_Time','Block_ID'))
+data_out = pd.DataFrame(columns=('blockN','onsetTime','blockID'))
 
 # An ExperimentHandler isn't essential but helps with data saving
 thisExp = data.ExperimentHandler(name=expName, version='',
@@ -51,7 +51,7 @@ endExpNow = False  # flag for 'escape' or other condition => quit the exp
 # Start Code - component code to be run before the window creation
 
 # Setup the Window
-win = visual.Window(size=[500,500], fullscr=False, screen=0, allowGUI=True, allowStencil=False,
+win = visual.Window(size=[500,500], fullscr=True, screen=0, allowGUI=True, allowStencil=False,
     monitor='testMonitor', color=[-1,-1,-1], colorSpace='rgb',
     blendMode='avg', useFBO=True
     )
@@ -267,11 +267,10 @@ for thisComponent in InstructionsComponents:
 routineTimer.reset()
 
 
-
 ##### Wait for scanner trigger key #####
 event.clearEvents(eventType='keyboard')
 
-ScannerKey = event.waitKeys(["^","escape"])
+ScannerKey = event.waitKeys(100,keyList=['t','escape'])
 if endExpNow or "escape" in ScannerKey:
    core.quit()
 globalClock.reset()
@@ -296,9 +295,8 @@ if thisBlock_Loop != None:
 
 nBlock = 0
 max_rt = 1
-iti = .35
+iti = .25
 RTclock = core.Clock()
-
 
 for thisBlock_Loop in Block_Loop:
     nBlock = nBlock+1
@@ -307,9 +305,6 @@ for thisBlock_Loop in Block_Loop:
     if thisBlock_Loop != None:
         for paramName in thisBlock_Loop.keys():
             exec(paramName + '= thisBlock_Loop.' + paramName)
-
-
-
 
     # set up handler to look after randomisation of conditions etc
     trials = data.TrialHandler(nReps=1, method='sequential',
@@ -337,7 +332,8 @@ for thisBlock_Loop in Block_Loop:
             core.quit()
     start_time = globalClock.getTime()
     for thisTrial in trials:
-
+        fixation.setAutoDraw(False)
+        win.flip()
         #Check if 20 seconds have elapsed. if yes break out of loop.
         if globalClock.getTime() >= (start_time + 20):
             break
