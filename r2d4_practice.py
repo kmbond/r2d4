@@ -20,8 +20,8 @@ _thisDir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(_thisDir)
 
 # Store info about the experiment session
-expName = 'testing_r2d4'  # from the Builder filename that created this script
-expInfo = {u'session': u'001', u'participant': u''}
+expName = 'r2d4_practice'  # from the Builder filename that created this script
+expInfo = {u'session': u'', u'participant': u''}
 dlg = gui.DlgFromDict(dictionary=expInfo, title=expName)
 if dlg.OK == False: core.quit()  # user pressed cancel
 expInfo['date'] = data.getDateStr()  # add a simple timestamp
@@ -64,7 +64,7 @@ else:
 # Initialize components for Routine "Instructions"
 InstructionsClock = core.Clock()
 instrText = visual.TextStim(win=win, ori=0, name='instrText',
-    text=u'In this experiment, you will see an image displayed on the screen. \nThis image corresponds to a specific finger movement. \n Next, there will be a practice block where  ',    font=u'Arial',
+    text=u'The practice session is about to begin',    font=u'Arial',
     pos=[0, 0], height=0.1, wrapWidth=None,
     color=u'white', colorSpace='rgb', opacity=1,
     depth=0.0)
@@ -274,193 +274,7 @@ for thisComponent in InstructionsComponents:
 # the Routine "Instructions" was not non-slip safe, so reset the non-slip timer
 routineTimer.reset()
 
-# set up handler to look after randomisation of conditions etc
-practice_loop = data.TrialHandler(nReps=3, method='sequential',
-    extraInfo=expInfo, originPath=None,
-    trialList=data.importConditions(u'test_stim.csv'),
-    seed=None, name='practice_loop')
-thisExp.addLoop(practice_loop)  # add the loop to the experiment
-thisPractice_loop = practice_loop.trialList[0]  # so we can initialise stimuli with some values
-# abbreviate parameter names if possible (e.g. rgb=thisPractice_loop.rgb)
-if thisPractice_loop != None:
-    for paramName in thisPractice_loop.keys():
-        exec(paramName + '= thisPractice_loop.' + paramName)
-
-for thisPractice_loop in practice_loop:
-
-    currentLoop = practice_loop
-    # abbreviate parameter names if possible (e.g. rgb = thisPractice_loop.rgb)
-    if thisPractice_loop != None:
-        for paramName in thisPractice_loop.keys():
-            exec(paramName + '= thisPractice_loop.' + paramName)
-
-    #------Prepare to start Routine "practice"-------
-    t = 0
-    practiceClock.reset()
-    routineTimer.add(10)  # clock
-
-    frameN = -1
-    # update component parameters for each repeat
-    image.setImage(img_id)
-    Practice_response = event.BuilderKeyResponse()  # create an object of type KeyResponse
-    Practice_response.status = NOT_STARTED
-    # keep track of which components have finished
-    practiceComponents = []
-    practiceComponents.append(image)
-    practiceComponents.append(Practice_response)
-    practiceComponents.append(Wrong_1)
-    practiceComponents.append(practiceFeedback)
-
-    for thisComponent in practiceComponents:
-        if hasattr(thisComponent, 'status'):
-            thisComponent.status = NOT_STARTED
-
-    #-------Start Routine "practice"-------
-    continueRoutine = True
-    while continueRoutine and routineTimer.getTime() > 0:
-        # get current time
-        t = practiceClock.getTime()
-        frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
-        # update/draw components on each frame
-
-        # *image* updates
-        if t >= .25 and image.status == NOT_STARTED:
-            # keep track of start time/frame for later
-            image.tStart = t  # underestimates by a little under one frame
-            image.frameNStart = frameN  # exact frame index
-            image.setAutoDraw(True)
-
-        # *Practice_response* updates
-        if t >= .25 and Practice_response.status == NOT_STARTED:
-            # keep track of start time/frame for later
-            Practice_response.tStart = t  # underestimates by a little under one frame
-            Practice_response.frameNStart = frameN  # exact frame index
-            Practice_response.status = STARTED
-            # keyboard checking is just starting
-            Practice_response.clock.reset()  # now t=0
-            event.clearEvents(eventType='keyboard')
-        if Practice_response.status == STARTED:
-            theseKeys = event.getKeys(keyList=['2', '3', '4', '5','h', 'j', 'k', 'l'])
-
-            # check for quit:
-            if "escape" in theseKeys:
-                endExpNow = True
-            if len(theseKeys) > 0:  # at least one key was pressed
-                if Practice_response.keys == []:
-                    Practice_response.keys = theseKeys[0]  # just the last key pressed
-
-                    Practice_response.rt = Practice_response.clock.getTime()
-                    # was this 'correct'?
-                    if (Practice_response.keys == str(cor_ans)) or (Practice_response.keys == cor_ans):
-                        Practice_response.corr = 1
-
-                    else:
-                        Practice_response.corr = 0
-                        Wrong_1.setAutoDraw(True)
-                    practiceFeedback.setAutoDraw(True)
-
-        # a response ends the routine
-        if practiceFeedback.status == STARTED and event.getKeys(keyList=['space']):
-            continueRoutine = False
-
-        # check if all components have finished
-        if not continueRoutine:  # a component has requested a forced-end of Routine
-            break
-        continueRoutine = False  # will revert to True if at least one component still running
-        for thisComponent in practiceComponents:
-            if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
-                continueRoutine = True
-                break  # at least one component has not yet finished
-
-        # check for quit (the Esc key)
-        if endExpNow or event.getKeys(keyList=["escape"]):
-            core.quit()
-
-        # refresh the screen
-        if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
-            win.flip()
-
-    #-------Ending Routine "practice"-------
-    for thisComponent in practiceComponents:
-        if hasattr(thisComponent, "setAutoDraw"):
-            thisComponent.setAutoDraw(False)
-    # Store nothing
-
-# completed 2 repeats of 'practice_loop'
-
-
-#------Prepare to start Routine "Begin_Blocks"-------
 t = 0
-Begin_BlocksClock.reset()  # clock
-frameN = -1
-# update component parameters for each repeat
-key_resp_3 = event.BuilderKeyResponse()  # create an object of type KeyResponse
-key_resp_3.status = NOT_STARTED
-# keep track of which components have finished
-Begin_BlocksComponents = []
-Begin_BlocksComponents.append(text_3)
-Begin_BlocksComponents.append(key_resp_3)
-
-for thisComponent in Begin_BlocksComponents:
-    if hasattr(thisComponent, 'status'):
-        thisComponent.status = NOT_STARTED
-
-#-------Start Routine "Begin_Blocks"-------
-continueRoutine = True
-while continueRoutine:
-    # get current time
-    t = Begin_BlocksClock.getTime()
-    frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
-    # update/draw components on each frame
-
-    # *text_3* updates
-    if t >= 0.0 and text_3.status == NOT_STARTED:
-        # keep track of start time/frame for later
-        text_3.tStart = t  # underestimates by a little under one frame
-        text_3.frameNStart = frameN  # exact frame index
-        text_3.setAutoDraw(True)
-
-    # *key_resp_3* updates
-    if t >= 0.0 and key_resp_3.status == NOT_STARTED:
-        # keep track of start time/frame for later
-        key_resp_3.tStart = t  # underestimates by a little under one frame
-        key_resp_3.frameNStart = frameN  # exact frame index
-        key_resp_3.status = STARTED
-        # keyboard checking is just starting
-        event.clearEvents(eventType='keyboard')
-    if key_resp_3.status == STARTED:
-        theseKeys = event.getKeys()
-
-        # check for quit:
-        if "escape" in theseKeys:
-            endExpNow = True
-        if len(theseKeys) > 0:  # at least one key was pressed
-            # a response ends the routine
-            continueRoutine = False
-
-    # check if all components have finished
-    if not continueRoutine:  # a component has requested a forced-end of Routine
-        break
-    continueRoutine = False  # will revert to True if at least one component still running
-    for thisComponent in Begin_BlocksComponents:
-        if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
-            continueRoutine = True
-            break  # at least one component has not yet finished
-
-    # check for quit (the Esc key)
-    if endExpNow or event.getKeys(keyList=["escape"]):
-        core.quit()
-
-    # refresh the screen
-    if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
-        win.flip()
-
-#-------Ending Routine "Begin_Blocks"-------
-for thisComponent in Begin_BlocksComponents:
-    if hasattr(thisComponent, "setAutoDraw"):
-        thisComponent.setAutoDraw(False)
-# the Routine "Begin_Blocks" was not non-slip safe, so reset the non-slip timer
-routineTimer.reset()
 
 # set up handler to look after randomisation of conditions etc
 Block_Loop = data.TrialHandler(nReps=1, method='sequential',
@@ -468,7 +282,7 @@ Block_Loop = data.TrialHandler(nReps=1, method='sequential',
     trialList=data.importConditions(u'practice_blocks.csv'),
     seed=None, name='Block_Loop')
 
-print Block_Loop.trialList
+
 thisExp.addLoop(Block_Loop)  # add the loop to the experiment
 thisBlock_Loop = Block_Loop.trialList[0]  # so we can initialise stimuli with some values
 # abbreviate parameter names if possible (e.g. rgb=thisBlock_Loop.rgb)
@@ -478,7 +292,7 @@ if thisBlock_Loop != None:
 
 nBlock = 0
 max_rt = 1
-iti = .35
+iti = .25
 RTclock = core.Clock()
 
 for thisBlock_Loop in Block_Loop:
@@ -545,7 +359,7 @@ for thisBlock_Loop in Block_Loop:
             win.flip()
             RTclock.reset()
             event.clearEvents(eventType='keyboard')
-            theseKeys = event.waitKeys(max_rt,('h','j','k','l'), timeStamped = RTclock)
+            theseKeys = event.waitKeys(max_rt,('2','3','4','5'), timeStamped = RTclock)
 
             if theseKeys is None:
                 key_response.corr = 0
