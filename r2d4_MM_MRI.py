@@ -27,8 +27,8 @@ expInfo['expName'] = expName
 # Data file name stem = absolute path + name; later add .psyexp, .csv, .log, etc
 filename = _thisDir + os.sep + 'data/%s_%s_%s' %(expInfo['participant'], expName, expInfo['date'])
 
-out_all_fn =  _thisDir + os.sep + 'data/%s_%s_data_%s.csv' %(expInfo['participant'], expName, expInfo['session'])
-data_out = pd.DataFrame(columns=('Onset_Time','Keys_Pressed','rt'))
+out_all_fn =  _thisDir + os.sep + 'data/%s_%s_%s_responses.csv' %(expInfo['participant'], expName, expInfo['session'])
+data_out = pd.DataFrame(columns=('onsetTime','correctResp','keysPressed'))
 
 
 # An ExperimentHandler isn't essential but helps with data saving
@@ -46,7 +46,7 @@ endExpNow = False  # flag for 'escape' or other condition => quit the exp
 # Start Code - component code to be run before the window creation
 
 # Setup the Window
-win = visual.Window(size=(500, 500), fullscr=False, screen=0, allowGUI=False, allowStencil=False,
+win = visual.Window(size=(500, 500), fullscr=True, screen=0, allowGUI=False, allowStencil=False,
     monitor='testMonitor', color=[-1,-1,-1], colorSpace='rgb',
     blendMode='avg', useFBO=True,
     )
@@ -153,14 +153,12 @@ t_vec = range(0,480,2)
 dfStims['trial_img'] = sequence_img_ids
 dfStims['trial_ans'] = vec
 
-print dfStims
-print t_vec
 
 #######################
 ## End Set up onsets ##
 #######################
 
-filename = _thisDir + os.sep + 'data/%s_%s_Onsets_%s.csv' %(expInfo['participant'], expName, expInfo['session'])
+filename = _thisDir + os.sep + 'data/%s_%s_%s_onsets.csv' %(expInfo['participant'], expName, expInfo['session'])
 np.savetxt(filename, ons, '%5.2f',delimiter=",")
 dfStims.to_csv('MM_onsets.csv', index= False)
 
@@ -242,7 +240,7 @@ max_rt = 1
 ##### Wait for scanner trigger key #####
 event.clearEvents(eventType='keyboard')
 
-ScannerKey = event.waitKeys(["^","escape"])
+ScannerKey = event.waitKeys(100,keyList=['t','escape'])
 if endExpNow or "escape" in ScannerKey:
    core.quit()
 globalClock.reset()
@@ -280,6 +278,8 @@ for thisTrial in trials:
 
 
     if trial_img != 'image_folder/skip.png':
+        fixation.setAutoDraw(False)
+        win.flip()
         image.setImage(trial_img)
         key_response = event.BuilderKeyResponse()  # create an object of type KeyResponse
         key_response.status = NOT_STARTED
