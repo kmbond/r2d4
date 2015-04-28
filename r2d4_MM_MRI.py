@@ -242,14 +242,11 @@ max_rt = 1
 ##### Wait for scanner trigger key #####
 event.clearEvents(eventType='keyboard')
 
-isHolding = 1
-while isHolding:
-    ScannerKey = event.waitKeys(keyList=['t'])
-    if ScannerKey[0] == 't':
-        isHolding=0
-    if endExpNow or event.getKeys(keyList=["escape"]):
-        core.quit()
-globalClock.reset()  # to track the time since experiment started
+ScannerKey = event.waitKeys(["^","escape"])
+if endExpNow or "escape" in ScannerKey:
+   core.quit()
+globalClock.reset()
+
 
 
 trial = -1

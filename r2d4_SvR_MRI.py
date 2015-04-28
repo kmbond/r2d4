@@ -271,14 +271,10 @@ routineTimer.reset()
 ##### Wait for scanner trigger key #####
 event.clearEvents(eventType='keyboard')
 
-isHolding = 1
-while isHolding:
-    ScannerKey = event.waitKeys(keyList=['^'])
-    if ScannerKey[0] == '^':
-        isHolding=0
-    if endExpNow or event.getKeys(keyList=["escape"]):
-        core.quit()
-globalClock.reset()  # to track the time since experiment started
+ScannerKey = event.waitKeys(["^","escape"])
+if endExpNow or "escape" in ScannerKey:
+   core.quit()
+globalClock.reset()
 
 
 #------Prepare to start Routine "Begin_Blocks"-------
