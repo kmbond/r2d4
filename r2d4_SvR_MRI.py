@@ -34,7 +34,7 @@ out_all_fn =  _thisDir + os.sep + 'data/%s_%s_%s_responses.csv' %(expInfo['parti
 #onset filename
 ons_fn = _thisDir + os.sep + 'data/%s_%s_%s_onsets.csv' %(expInfo['participant'], expName,expInfo['session'])
 
-data_out = pd.DataFrame(columns=('blockN','onsetTime','blockID'))
+data_out = pd.DataFrame(columns=('blockN','isRandom','onsetTime', 'KeyPressed', 'Correct', 'responseTime'))
 
 # An ExperimentHandler isn't essential but helps with data saving
 thisExp = data.ExperimentHandler(name=expName, version='',
@@ -51,7 +51,7 @@ endExpNow = False  # flag for 'escape' or other condition => quit the exp
 # Start Code - component code to be run before the window creation
 
 # Setup the Window
-win = visual.Window(size=[500,500], fullscr=True, screen=0, allowGUI=True, allowStencil=False,
+win = visual.Window(size=[500,500], fullscr=False, screen=0, allowGUI=True, allowStencil=False,
     monitor='testMonitor', color=[-1,-1,-1], colorSpace='rgb',
     blendMode='avg', useFBO=True
     )
@@ -332,6 +332,7 @@ for thisBlock_Loop in Block_Loop:
             core.quit()
     start_time = globalClock.getTime()
     for thisTrial in trials:
+
         fixation.setAutoDraw(False)
         win.flip()
         #Check if 20 seconds have elapsed. if yes break out of loop.
@@ -355,7 +356,6 @@ for thisBlock_Loop in Block_Loop:
         key_response.status = NOT_STARTED
         # keep track of which components have finished
         #see if this works better:
-
         BlockComponents = []
         BlockComponents.append(image_2)
         BlockComponents.append(key_response)
@@ -366,13 +366,14 @@ for thisBlock_Loop in Block_Loop:
 
         #-------Start Routine "Block"-------
         continueRoutine = True
-        while continueRoutine and routineTimer.getTime() > 0:
+
+        while continueRoutine:
+            print "I am not here"
             # get current time
             t = BlockClock.getTime()
             frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
             # update/draw components on each frame
             # *image_2* updates
-
             image_2.setAutoDraw(True)
             win.flip()
             RTclock.reset()
@@ -425,14 +426,21 @@ for thisBlock_Loop in Block_Loop:
         block_rts = np.append(block_rts,key_response.rt)
         acc_last_block = np.append(acc_last_block, key_response.corr)
 
+        #Was this random or sequence
+        if block_ids[nBlock-1] == 1:
+            isRandom = 1
+        elif block_ids[nBlock-1] ==2:
+            isRandom = 0
         #save data in case program crashes -- remove this if its causing any hold ups
+        data_out.loc[len(data_out)+1]=[nBlock,isRandom,start_time,str(key_response.keys), key_response.corr, key_response.rt]
+        data_out.to_csv(out_all_fn, index=False)
 
         #ocasionally key is
         if not key_response.rt:
             key_response.rt = float('nan')
         #add data to file
-    data_out.loc[len(data_out)+1]=[nBlock, start_time, block_ids[nBlock-1]]
-    data_out.to_csv(out_all_fn, index=False)
+        # data_out.loc[len(data_out)+1]=[nBlock, start_time, block_ids[nBlock-1]]
+        # data_out.to_csv(out_all_fn, index=False)
         #'data/%s_%s_%s' %(expInfo['participant'], expName, expInfo['date'])
 
 
