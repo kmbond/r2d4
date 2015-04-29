@@ -51,7 +51,7 @@ endExpNow = False  # flag for 'escape' or other condition => quit the exp
 # Start Code - component code to be run before the window creation
 
 # Setup the Window
-win = visual.Window(size=[500,500], fullscr=False, screen=0, allowGUI=True, allowStencil=False,
+win = visual.Window(size=[500,500], fullscr=True, screen=0, allowGUI=True, allowStencil=False,
     monitor='testMonitor', color=[-1,-1,-1], colorSpace='rgb',
     blendMode='avg', useFBO=True
     )
@@ -368,7 +368,6 @@ for thisBlock_Loop in Block_Loop:
         continueRoutine = True
 
         while continueRoutine:
-            print "I am not here"
             # get current time
             t = BlockClock.getTime()
             frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
