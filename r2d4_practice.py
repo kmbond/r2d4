@@ -435,7 +435,7 @@ for thisBlock_Loop in Block_Loop:
 
     #feedback text component after block completion.
     text_4 = visual.TextStim(win=win, ori=0, name='text_2',
-        text='End of Block. You got %i trials correct. Your mean response time was : %.2f. \n Press any key to continue' %(n_corr,mean_rt),    font=u'Arial',
+        text='End of Block. You got %i  trials correct out of 256. Your mean response time was : %.2f. \n Press any key to continue' %(n_corr,mean_rt),    font=u'Arial',
         pos=[0, 0], height=0.1, wrapWidth=None,
         color=u'white', colorSpace='rgb', opacity=1,
         depth=0.0)
