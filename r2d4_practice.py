@@ -46,7 +46,7 @@ endExpNow = False  # flag for 'escape' or other condition => quit the exp
 # Start Code - component code to be run before the window creation
 
 # Setup the Window
-win = visual.Window(size=[400,400], fullscr=True, screen=0, allowGUI=True, allowStencil=False,
+win = visual.Window(size=[400,400], fullscr=True, screen=0, allowGUI=False, allowStencil=False,
     monitor='testMonitor', color=[-1,-1,-1], colorSpace='rgb',
     blendMode='avg', useFBO=True
     )
@@ -64,7 +64,7 @@ else:
 # Initialize components for Routine "Instructions"
 InstructionsClock = core.Clock()
 instrText = visual.TextStim(win=win, ori=0, name='instrText',
-    text=u'The practice session is about to begin',    font=u'Arial',
+    text=u'The practice session is about to begin. Press any key to continue.',    font=u'Arial',
     pos=[0, 0], height=0.1, wrapWidth=None,
     color=u'white', colorSpace='rgb', opacity=1,
     depth=0.0)
@@ -159,11 +159,11 @@ def genRandom(length):
     random_ans = []
     for x in range(0,length):
         if len(random_stims) == 0:
-            random_stims.append(randint(2,5))
+            random_stims.append(randint(2,6))
         elif len(random_stims) > 0:
-            val = randint(2,5)
+            val = randint(2,6)
             while val == random_stims[x-1]:
-                val = randint(2,5)
+                val = randint(2,6)
             random_stims.append(val)
         random_img_ids.append(img_dict[random_stims[x]])
         random_ans.append(key_dict[random_stims[x]])
