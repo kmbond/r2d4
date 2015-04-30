@@ -51,10 +51,11 @@ endExpNow = False  # flag for 'escape' or other condition => quit the exp
 # Start Code - component code to be run before the window creation
 
 # Setup the Window
-win = visual.Window(size=[500,500], fullscr=True, screen=0, allowGUI=True, allowStencil=False,
+win = visual.Window(size=[500,500], fullscr=True, screen=0, allowGUI=False, allowStencil=False,
     monitor='testMonitor', color=[-1,-1,-1], colorSpace='rgb',
     blendMode='avg', useFBO=True
     )
+
 
 # store frame rate of monitor if we can measure it successfully
 expInfo['frameRate']=win.getActualFrameRate()
@@ -142,11 +143,11 @@ def genRandom(length):
     random_ans = []
     for x in range(0,length):
         if len(random_stims) == 0:
-            random_stims.append(randint(2,5))
+            random_stims.append(randint(2,6))
         elif len(random_stims) > 0:
-            val = randint(2,5)
+            val = randint(2,6)
             while val == random_stims[x-1]:
-                val = randint(2,5)
+                val = randint(2,6)
             random_stims.append(val)
         random_img_ids.append(img_dict[random_stims[x]])
         random_ans.append(key_dict[random_stims[x]])
@@ -270,7 +271,7 @@ routineTimer.reset()
 ##### Wait for scanner trigger key #####
 event.clearEvents(eventType='keyboard')
 
-ScannerKey = event.waitKeys(100,keyList=['t','escape'])
+ScannerKey = event.waitKeys(["^","escape"])
 if endExpNow or "escape" in ScannerKey:
    core.quit()
 globalClock.reset()
