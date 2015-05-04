@@ -20,8 +20,8 @@ _thisDir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(_thisDir)
 
 # Store info about the experiment session
-expName = 'testing_r2d4'  # from the Builder filename that created this script
-expInfo = {u'session': u'001', u'participant': u''}
+expName = 'r2d4_behavior'  # from the Builder filename that created this script
+expInfo = {u'Day': u'', u'participant': u''}
 dlg = gui.DlgFromDict(dictionary=expInfo, title=expName)
 if dlg.OK == False: core.quit()  # user pressed cancel
 expInfo['date'] = data.getDateStr()  # add a simple timestamp
@@ -33,7 +33,7 @@ filename = _thisDir + os.sep + 'data/%s_%s_%s' %(expInfo['participant'], expName
 
 # Output summary data and analyzed files
 out_sum_fn =  _thisDir + os.sep +'data/%s_summary_%s_%s.csv' %(expInfo['participant'], expName, expInfo['date'])
-out_all_fn =  _thisDir + os.sep +'data/%s_all_data_%s_%s.csv' %(expInfo['participant'], expName, expInfo['date'])
+out_all_fn =  _thisDir + os.sep +'data/%s_%s_%s_%s.csv' %(expInfo['participant'], expName,  expInfo['date'], expInfo['date'])
 
 data_out = pd.DataFrame(columns=('block','response','rt', 'type'))
 
@@ -44,7 +44,7 @@ img_dict = {2: 'image_folder/stim_2.png', 3: 'image_folder/stim_3.png', 4: 'imag
 key_dict = {2:'h', 3:'j', 4:'k', 5:'l'}#key mapping
 length = 256 # number of trials within a  block should be 256
 dfStims = pd.DataFrame()
-block_ids = [1, 1] #, 2, 2, 2, 1, 2] #1 is random #2 is sequence
+block_ids = [1, 1, 2, 2, 2, 1, 2]#1 is random #2 is sequence
 
 #Generate Pseudo-Random Stimuli Ordering
 def genRandom(length):
@@ -484,7 +484,7 @@ if thisBlock_Loop != None:
 
 nBlock = 0
 max_rt = 1
-iti = .35
+iti = .25
 RTclock = core.Clock()
 
 for thisBlock_Loop in Block_Loop:
@@ -786,7 +786,7 @@ for i in np.unique(data_out[['block']]):
     plt.figure(figsize=(8, 6))
     axvline(x=np.unique(data_out[['block']]),color='k',ls='dashed')
     sns.lmplot('trial', 'rt', hue = 'type', data=data_out, fit_reg=False)
-    plt.axis([0, 2000, 0, 1.2])
+    plt.axis([0, 2000, 0, 1.3])
     plt.savefig(plot_fn)
 
 
