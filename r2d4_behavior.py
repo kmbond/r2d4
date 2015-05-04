@@ -53,11 +53,11 @@ def genRandom(length):
     random_ans = []
     for x in range(0,length):
         if len(random_stims) == 0:
-            random_stims.append(randint(2,5))
+            random_stims.append(randint(2,6))
         elif len(random_stims) > 0:
-            val = randint(2,5)
+            val = randint(2,6)
             while val == random_stims[x-1]:
-                val = randint(2,5)
+                val = randint(2,6)
             random_stims.append(val)
         random_img_ids.append(img_dict[random_stims[x]])
         random_ans.append(key_dict[random_stims[x]])
@@ -113,7 +113,7 @@ endExpNow = False  # flag for 'escape' or other condition => quit the exp
 # Start Code - component code to be run before the window creation
 
 # Setup the Window
-win = visual.Window(size=[400,400], fullscr=True, screen=0, allowGUI=True, allowStencil=False,
+win = visual.Window(size=[400,400], fullscr=True, screen=0, allowGUI=False, allowStencil=False,
     monitor='testMonitor', color=[-1,-1,-1], colorSpace='rgb',
     blendMode='avg', useFBO=True
     )
@@ -131,7 +131,7 @@ else:
 # Initialize components for Routine "Instructions"
 InstructionsClock = core.Clock()
 instrText = visual.TextStim(win=win, ori=0, name='instrText',
-    text=u'In this experiment, you will see an image displayed on the screen. \nThis image corresponds to a specific finger movement. \n Next, there will be a practice block where  ',    font=u'Arial',
+    text=u'In this experiment, you will see an image displayed on the screen. \nThis image corresponds to a specific finger movement. \n Next, there will be a practice block where you learn the mapping from image to key.  ',    font=u'Arial',
     pos=[0, 0], height=0.1, wrapWidth=None,
     color=u'white', colorSpace='rgb', opacity=1,
     depth=0.0)
@@ -489,6 +489,7 @@ RTclock = core.Clock()
 
 for thisBlock_Loop in Block_Loop:
     nBlock = nBlock+1
+    print "The current block is %.2f, and the maxrt = %.2f" %(nBlock, max_rt)
     currentLoop = Block_Loop
     # abbreviate parameter names if possible (e.g. rgb = thisBlock_Loop.rgb)
     if thisBlock_Loop != None:
@@ -509,7 +510,6 @@ for thisBlock_Loop in Block_Loop:
 
     block_rts = []
     acc_last_block = []
-    max_rt = max_rt
     for thisTrial in trials:
 
         currentLoop = trials
@@ -619,7 +619,7 @@ for thisBlock_Loop in Block_Loop:
     std_rt = np.nanstd(block_rts)
     adapt_rt = mean_rt+std_rt
 
-    if (adapt_rt <.200 or acc_last_block < 0.75) or (nBlock == 6 or nBlock == 7) :
+    if (adapt_rt <.200 or acc_last_block < 0.75) or (nBlock == 6 or nBlock == 7):
         max_rt = 1.0
     else:
         max_rt = adapt_rt
@@ -628,7 +628,7 @@ for thisBlock_Loop in Block_Loop:
 
     #feedback text component after block completion.
     text_4 = visual.TextStim(win=win, ori=0, name='text_2',
-        text='End of Block. You got %i trials correct. Your mean response time was : %.2f. \n Press any key to continue' %(n_corr,mean_rt),    font=u'Arial',
+        text='End of Block. Mean response time: %.2f s.\n %.2f %% trials correct' %(mean_rt, n_corr/256), font=u'Arial',
         pos=[0, 0], height=0.1, wrapWidth=None,
         color=u'white', colorSpace='rgb', opacity=1,
         depth=0.0)
@@ -776,7 +776,7 @@ win.close()
 
 skip_index = 32
 max_lags = 31
-plot_fn =  _thisDir + os.sep +'data/rt_plot%s_%s_%s.png' %(expInfo['participant'], expName, expInfo['date'])
+plot_fn =  _thisDir + os.sep +'data/rtPlot_%s_%s_%s_Day_%s.png' %(expInfo['participant'], expName, expInfo['date'], expInfo['Day'])
 
 
 for i in np.unique(data_out[['block']]):
