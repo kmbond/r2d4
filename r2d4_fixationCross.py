@@ -20,15 +20,8 @@ os.chdir(_thisDir)
 # Store info about the experiment session
 expName = u'fixation_cross'  # from the Builder filename that created this script
 expInfo = {'participant':u'', 'session':u''}
-dlg = gui.DlgFromDict(dictionary=expInfo, title=expName)
-if dlg.OK == False: core.quit()  # user pressed cancel
-expInfo['date'] = data.getDateStr()  # add a simple timestamp
-expInfo['expName'] = expName
-
-
 endExpNow = False  # flag for 'escape' or other condition => quit the exp
 
-# Start Code - component code to be run before the window creation
 
 # Setup the Window
 win = visual.Window(size=(500, 500), fullscr=True, screen=0, allowGUI=False, allowStencil=False,
@@ -44,7 +37,7 @@ else:
 
 
 fixation = visual.ShapeStim(win,
-    vertices=((0, -0.2), (0, 0.2), (0,0), (-0.2,0), (0.2, 0)),
+    vertices=((0, -0.2), (0, 0.2), (0,0), (-0.15,0), (0.15, 0)),
     lineWidth=5,
     closeShape=False,
     lineColor='white')
@@ -54,13 +47,9 @@ routineTimer = core.CountdownTimer()  # to track time remaining of each (non-sli
 
 t = 0
 frameN = -1
-routineTimer.add(5.000000)
-# update component parameters for each repeat
-# keep track of which components have finished
-
 
 trial = -1
-while globalClock.getTime() < 430:
+while globalClock.getTime() < 500:
 
     fixation.setAutoDraw(True)
     win.flip()

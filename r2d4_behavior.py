@@ -784,9 +784,7 @@ for i in np.unique(data_out[['block']]):
     data_out['trial'] = np.array(range(1,len(data_out)+1))
     sns.set_context("paper")
     plt.figure(figsize=(8, 6))
-    axvline(x=np.unique(data_out[['block']]),color='k',ls='dashed')
     sns.lmplot('trial', 'rt', hue = 'type', data=data_out, fit_reg=False)
-    plt.axis([0, 2000, 0, 1.3])
     plt.savefig(plot_fn)
 
 
