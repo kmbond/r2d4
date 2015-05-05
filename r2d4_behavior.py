@@ -42,7 +42,7 @@ data_out = pd.DataFrame(columns=('block','response','rt', 'type'))
 #### Generate Stimuli ####
 img_dict = {2: 'image_folder/stim_2.png', 3: 'image_folder/stim_3.png', 4: 'image_folder/stim_4.png', 5: 'image_folder/stim_5.png'}
 key_dict = {2:'h', 3:'j', 4:'k', 5:'l'}#key mapping
-length = 256 # number of trials within a  block should be 256
+length = 256 # number of trials within a block should be 256
 dfStims = pd.DataFrame()
 block_ids = [1, 1, 2, 2, 2, 1, 2]#1 is random #2 is sequence
 
@@ -630,7 +630,7 @@ for thisBlock_Loop in Block_Loop:
 
     #feedback text component after block completion.
     text_4 = visual.TextStim(win=win, ori=0, name='text_2',
-        text='End of Block.\n Mean response time: %.2f seconds \n %.2f %% trials correct' %(mean_rt, n_corr/256*100), font=u'Arial',
+        text='End of Block.\nMean response time: %i ms\nTrials correct: %i %% ' %(mean_rt*1000, n_corr/256*100), font=u'Arial',
         pos=[0, 0], height=0.1, wrapWidth=None,
         color=u'white', colorSpace='rgb', opacity=1,
         depth=0.0)
