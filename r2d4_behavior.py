@@ -489,7 +489,9 @@ RTclock = core.Clock()
 
 for thisBlock_Loop in Block_Loop:
     nBlock = nBlock+1
-    print "The current block is %.2f, and the maxrt = %.2f" %(nBlock, max_rt)
+    if (nBlock == 6 or nBlock == 7):
+        max_rt = 1.0
+
     currentLoop = Block_Loop
     # abbreviate parameter names if possible (e.g. rgb = thisBlock_Loop.rgb)
     if thisBlock_Loop != None:
@@ -619,7 +621,7 @@ for thisBlock_Loop in Block_Loop:
     std_rt = np.nanstd(block_rts)
     adapt_rt = mean_rt+std_rt
 
-    if (adapt_rt <.200 or acc_last_block < 0.75) or (nBlock == 6 or nBlock == 7):
+    if (adapt_rt <.200 or acc_last_block < 0.75):
         max_rt = 1.0
     else:
         max_rt = adapt_rt
@@ -628,7 +630,7 @@ for thisBlock_Loop in Block_Loop:
 
     #feedback text component after block completion.
     text_4 = visual.TextStim(win=win, ori=0, name='text_2',
-        text='End of Block. Mean response time: %.2f s.\n %.2f %% trials correct' %(mean_rt, n_corr/256), font=u'Arial',
+        text='End of Block.\n Mean response time: %.2f seconds \n %.2f %% trials correct' %(mean_rt, n_corr/256*100), font=u'Arial',
         pos=[0, 0], height=0.1, wrapWidth=None,
         color=u'white', colorSpace='rgb', opacity=1,
         depth=0.0)
