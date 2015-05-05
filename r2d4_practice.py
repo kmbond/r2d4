@@ -150,7 +150,7 @@ img_dict = {2: 'image_folder/stim_2.png', 3: 'image_folder/stim_3.png', 4: 'imag
 key_dict = {2:'2', 3:'3', 4:'4', 5:'5'}#key mapping
 length = 256 # number of trials within a  block should be 256
 dfStims = pd.DataFrame()
-block_ids = [1, 1] #1 is random #2 is sequence
+block_ids = [1] #1 is random #2 is sequence
 
 #Generate Pseudo-Random Stimuli Ordering
 def genRandom(length):
