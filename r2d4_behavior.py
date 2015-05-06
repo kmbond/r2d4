@@ -31,8 +31,8 @@ filename = _thisDir + os.sep + 'data/%s_%s_%s' %(expInfo['participant'], expName
 
 
 # Output summary data and analyzed files
-out_sum_fn =  _thisDir + os.sep +'data/%s_summary_%s_%s.csv' %(expInfo['participant'], expName, expInfo['date'])
-out_all_fn =  _thisDir + os.sep +'data/%s_%s_%s_%s.csv' %(expInfo['participant'], expName,  expInfo['date'], expInfo['date'])
+out_sum_fn =  _thisDir + os.sep +'data/%s_summary_%s_%s_%s.csv' %(expInfo['participant'], expName, expInfo['date'], expInfo['Day'])
+out_all_fn =  _thisDir + os.sep +'data/%s_%s_%s_%s.csv' %(expInfo['participant'], expName,  expInfo['date'], expInfo['Day'])
 
 data_out = pd.DataFrame(columns=('block','response','rt', 'type'))
 
