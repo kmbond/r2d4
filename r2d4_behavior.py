@@ -31,10 +31,10 @@ filename = _thisDir + os.sep + 'data/%s_%s_%s' %(expInfo['participant'], expName
 
 
 # Output summary data and analyzed files
-out_sum_fn =  _thisDir + os.sep +'data/%s_summary_%s_%s_%s.csv' %(expInfo['participant'], expName, expInfo['date'], expInfo['Day'])
-out_all_fn =  _thisDir + os.sep +'data/%s_%s_%s_%s.csv' %(expInfo['participant'], expName,  expInfo['date'], expInfo['Day'])
+out_sum_fn =  _thisDir + os.sep +'data/%s_summary_%s_%s_Day_%s.csv' %(expInfo['participant'], expName, expInfo['date'], expInfo['Day'])
+out_all_fn =  _thisDir + os.sep +'data/%s_allResp_%s_%s_Day_%s.csv' %(expInfo['participant'], expName,  expInfo['date'], expInfo['Day'])
 
-data_out = pd.DataFrame(columns=('block','response','rt', 'type'))
+data_out = pd.DataFrame(columns=('block','response','rt', 'type', 'keyPressed', 'correctKey'))
 
 
 
@@ -609,7 +609,7 @@ for thisBlock_Loop in Block_Loop:
         if not key_response.rt:
             key_response.rt = float('nan')
         #add data to file
-        data_out.loc[len(data_out)+1]=[nBlock, key_response.corr, key_response.rt, trial_type]
+        data_out.loc[len(data_out)+1]=[nBlock, key_response.corr, key_response.rt, trial_type, key_response.keys, str(eval(Block_ans))]
         data_out.to_csv(out_all_fn, index=False)
         #'data/%s_%s_%s' %(expInfo['participant'], expName, expInfo['date'])
     #build adaptive rt design.
@@ -787,7 +787,6 @@ for i in np.unique(data_out[['block']]):
     plt.figure(figsize=(8, 6))
     sns.lmplot('trial', 'rt', hue = 'type', data=data_out, fit_reg=False)
     plt.savefig(plot_fn)
-
 
     block_df = data_out.loc[data_out['block']==i]
     mean_acc = block_df[['response']].mean()
