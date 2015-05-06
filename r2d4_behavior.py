@@ -1,7 +1,6 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 
-
 from __future__ import division  # so that 1/3=0.333 instead of 1/3=0
 from psychopy import visual, core, data, event, logging, gui
 from psychopy.constants import *  # things like STARTED, FINISHED
@@ -604,7 +603,7 @@ for thisBlock_Loop in Block_Loop:
         #save data in case program crashes -- remove this if its causing any hold ups
         if nBlock in [1,2,6]:
             trial_type = 1
-        elif nBlock in [2,4,5,7]:
+        elif nBlock in [3,4,5,7]:
             trial_type = 2
         #ocasionally key is
         if not key_response.rt:
