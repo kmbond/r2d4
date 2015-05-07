@@ -770,7 +770,7 @@ for thisComponent in End_ExperimentComponents:
 #build summary statistics file
 lag_names = ['lag' + str(i) for i in  range(1,32)]
 data_lags = pd.DataFrame(columns = lag_names)
-sum_names = ['block', 'accuracy', 'rt_all', 'rt_cor']
+sum_names = ['block', 'accuracy', 'rt_all', 'rt_cor', 'sdAcc', 'sdRT']
 data_summary = pd.DataFrame(columns = (sum_names))
 
 win.close()
@@ -793,6 +793,8 @@ for i in np.unique(data_out[['block']]):
     rt_all = block_df[['rt']].mean()
     block_df_cor = block_df.loc[block_df['response']==1]
     rt_cor = block_df_cor[['rt']].mean()
+    std_acc = block_df[['response']].pstdev()
+    std_rt =  block_df_cor[['rt']].pstdev()
 
     #del skip trials
     good_trials = block_df.drop(block_df.index[:skip_index])
@@ -813,7 +815,7 @@ for i in np.unique(data_out[['block']]):
     ax1.axhline(0, color='black', lw=2)
     lags = c[32:]
     data_lags.loc[i] = lags
-    data_summary.loc[i] = [i, mean_acc.response, rt_all.rt, rt_cor.rt]
+    data_summary.loc[i] = [i, mean_acc.response, rt_all.rt, rt_cor.rt, std_acc.response, std_rt.rt]
 
 data_summary = pd.merge(data_summary, data_lags, left_on = 'block', right_on='lag1',left_index = True,right_index = True, how= 'outer')
 data_summary.to_csv(out_sum_fn, index=False)
