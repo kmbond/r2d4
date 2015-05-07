@@ -793,8 +793,8 @@ for i in np.unique(data_out[['block']]):
     rt_all = block_df[['rt']].mean()
     block_df_cor = block_df.loc[block_df['response']==1]
     rt_cor = block_df_cor[['rt']].mean()
-    std_acc = block_df[['response']].pstdev()
-    std_rt =  block_df_cor[['rt']].pstdev()
+    std_acc = block_df[['response']].std()
+    std_rt =  block_df_cor[['rt']].std()
 
     #del skip trials
     good_trials = block_df.drop(block_df.index[:skip_index])
