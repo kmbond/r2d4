@@ -116,8 +116,7 @@ msg.preamble = ''
 
 # Credentials (if needed)
 username = 'beuk.pat'
-password = 'coffeecigarcomputing'
-
+password = ''
 for file in glob.glob('*.png'):
     fp = open(file, 'rb')
     img = MIMEImage(fp.read(), name=os.path.basename(file))
