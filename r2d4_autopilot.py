@@ -115,8 +115,8 @@ msg['To'] = 'beuk.pat@gmail.com'
 msg.preamble = ''
 
 # Credentials (if needed)
-username = 'beuk.pat'
-password = ''
+username = 'username'
+password = 'enter_your_password'
 for file in glob.glob('*.png'):
     fp = open(file, 'rb')
     img = MIMEImage(fp.read(), name=os.path.basename(file))
