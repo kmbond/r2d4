@@ -9,7 +9,7 @@
   a. Install pip, (conda install pip)
   b. Install psyhopy (pip install psychopy) 
   c. Install pyglet (pip install pyglet)
-  d. Install wxpython (conda install wxpython), and seaboorn, pip install seaborn. 
+  d. Install wxpython (conda install wxpython), and seaborn, pip install seaborn. 
 
 5. Depending on your python environment, you may be need to install additional dependencies which you will discover when executing r2d4_behavior.py or the MRI experiments.
 
