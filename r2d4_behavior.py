@@ -784,9 +784,7 @@ for i in np.unique(data_out[['block']]):
     #make a plot of the response times vs trial and plot by type save with subject's id.
     data_out['trial'] = np.array(range(1,len(data_out)+1))
     sns.set_context("paper")
-    plt.figure(figsize=(8, 6))
-    sns.lmplot('trial', 'rt', hue = 'type', data=data_out, fit_reg=False)
-    plt.savefig(plot_fn)
+
 
     block_df = data_out.loc[data_out['block']==i]
     mean_acc = block_df[['response']].mean()
@@ -796,26 +794,32 @@ for i in np.unique(data_out[['block']]):
     std_acc = block_df[['response']].std()
     std_rt =  block_df_cor[['rt']].std()
 
-    #del skip trials
+    #do not replace skip trials
     good_trials = block_df.drop(block_df.index[:skip_index])
-    #replace NaNs with mean of rts in that block
-    good_trials = good_trials[['rt']].replace(np.nan,rt_cor.rt)
-
-    #regress the good trials
-    y = np.array(good_trials['rt'])
+    good_trials = good_trials[['rt']].replace(np.nan,np.nan)
+    y = np.array(good_trials)
     x = np.linspace(1,y.size,y.size)
     x = np.vstack([x,np.ones(len(x))]).T
-    result = sm.OLS(y, x).fit()
-    R = result.resid
-
-    #calculate autocorrelation and plot if desired:
-    fig = plt.figure()
-    ax1 = fig.add_subplot(211)
-    lag_trials,c,line,b = ax1.acorr(R, normed=True, maxlags=max_lags)
-    ax1.axhline(0, color='black', lw=2)
-    lags = c[32:]
+    result = sm.OLS(y, x, missing='drop').fit()
+    R = result.resid                
+    acfResults = statsmodels.tsa.stattools.acf(R,unbiased=True, nlags=31, fft=True, alpha=0.05, missing='drop')
+    lags = acfResults[0]
+    lags = lags[1:] #don't care about first lag always 1
     data_lags.loc[i] = lags
-    data_summary.loc[i] = [i, mean_acc.response, rt_all.rt, rt_cor.rt, std_acc.response, std_rt.rt]
+
+    x = range(1,32)
+    y = acfResults[0]
+    y = y[1:].T
+    error = acfResults[1]
+    error = error[1:]
+    up_conf = error[:,1]
+    low_conf = error[:,0]
+
+    #Put into summary data frame. As Column,
+    chunkSize = np.argmax(low_conf<0)
+    data_summary.loc[i] = [i, mean_acc.response, rt_all.rt, rt_cor.rt, std_acc.response, std_rt.rt, chunkSize]
+
+    
 
 data_summary = pd.merge(data_summary, data_lags, left_on = 'block', right_on='lag1',left_index = True,right_index = True, how= 'outer')
 data_summary.to_csv(out_sum_fn, index=False)
