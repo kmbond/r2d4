@@ -255,8 +255,7 @@ max_rt = 1
 
 ##### Wait for scanner trigger key #####
 event.clearEvents(eventType='keyboard')
-
-ScannerKey = event.waitKeys(["^","escape"])
+ScannerKey = event.waitKeys(["asciicircum","escape"])
 if endExpNow or "escape" in ScannerKey:
    core.quit()
 globalClock.reset()
