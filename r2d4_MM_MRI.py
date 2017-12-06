@@ -11,7 +11,6 @@ import os  # handy system and path functions
 import statsmodels.formula.api as sm
 import matplotlib.pyplot as plt
 import seaborn as sns
-import scipy.io
 
 # Ensure that relative paths start from the same directory as this script
 _thisDir = os.path.dirname(os.path.abspath(__file__))
@@ -77,7 +76,7 @@ image = visual.ImageStim(win=win, name='image',units='pix',
     texRes=128, interpolate=True, depth=0.0)
 
 fixation = visual.ShapeStim(win,
-    vertices=((0, -0.2), (0, 0.2), (0,0), (-0.2,0), (0.2, 0)),
+    vertices=((0, -0.075), (0, 0.075), (0,0), (-0.05,0), (0.05, 0)),
     lineWidth=5,
     closeShape=False,
     lineColor='white')
@@ -164,21 +163,6 @@ np.savetxt(filename, ons, '%5.2f',delimiter=",")
 dfStims.to_csv('MM_onsets.csv', index= False)
 
 
-#######################
-## Save as mat file for SPM
-#######################
-
-#
-# new_onsets = np.empty((4,), dtype=object)
-# df = pd.read_csv('0273_r2d4_MM_Run1_onsets.csv',header=None)
-# new_onsets[0] = np.array(df[0][:,np.newaxis])/2
-# new_onsets[1] = np.array(df[1][:,np.newaxis])/2
-# new_onsets[2] = np.array(df[2][:,np.newaxis])/2
-# new_onsets[3] = np.array(df[3][:,np.newaxis])/2
-# data={}
-# data['ons'] = new_onsets
-# scipy.io.savemat('0273_r2d4_MM_Run1_onsets.mat', data)
-#
 
 # Create some handy timers
 globalClock = core.Clock()  # to track the time since experiment started
@@ -256,6 +240,7 @@ max_rt = 1
 ##### Wait for scanner trigger key #####
 event.clearEvents(eventType='keyboard')
 ScannerKey = event.waitKeys(["asciicircum","escape"])
+
 if endExpNow or "escape" in ScannerKey:
    core.quit()
 globalClock.reset()
