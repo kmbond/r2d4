@@ -23,3 +23,6 @@
 4. Encoding of blocks: 1:random, 2:sequence
 
 5. For the MRI experiments (MM and SvR), enter the Run number as the session number. 
+
+# Analysis of the data. 
+[Jupyter notebook](https://nbviewer.jupyter.org/github/pbeukema/r2d4/blob/master/analysis.ipynb) containing code to reproduce Beukema, Diedrichsen, Verstynen 2018 arXiv. 
