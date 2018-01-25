@@ -22,22 +22,24 @@
 #         phase.json
 
 # Requirements for openfMRI:
-# 1. Deface your high res T1/T2 - this python script https://github.com/poldracklab/pydeface will do that nicely
-# 2. You must follow a very precise naming convention. I wish that they hadn't used '-' in the name. I don't follow that logic.
-# 3. You must have very specific hdr info if you include fieldmaps. That header info can be easily generated with Chris Rordens 
+# - Deface your high res T1/T2 - this python script https://github.com/poldracklab/pydeface will do that nicely
+# - You must follow a very precise naming convention. I wish that they hadn't used '-' in the name. I don't follow that logic.
+# - You must have very specific hdr info if you include fieldmaps. That header info can be easily generated with Chris Rordens 
 #    https://github.com/rordenlab/dcm2niix That software is included in mricrogl. So you can do command line: dcm2niix
 #    /path/to/dcm/data/ that will output json files which you can either copy directly into your BIDS files or you can copy specific
 #    lines. Note that one outstanding issue is the calculation of TotalReadoutTime.
-# 4. Your onset files must be tsv with at minimum columns for onset time and onset duration
-# 5. gzip the niis to save space.
-# 6. Dirs at a lower level inherit json properties from above, such as for longitudional scans.
-
+# - Your onset files must be tsv with at minimum columns for 'onset' and 'duration' with those exact names. 
+# - gzip the niis to save space.
+# - Dirs at a lower level inherit json properties from above, such as for longitudional scans.
+# This entire process takes about 5 minutes per subject - bottle neck is defacing followed by gzipping. 
+# Final database size is ~30 GB. 
 
 fmap_name=fieldmap_96_AP_2mmIsoVoxel_192FOV_66Slices
 t1_name=t1_mpr_sag_iso_2pat_9degflip_TI900
 t2_name=t2_spc_sag_p2_iso
 id_count=1
-n_subs=18 #change to your n_subs
+n_subs=18 # change to your specific n_subs
+nruns=6 # how many independent runs per scanning session 
 for subject in $(seq 1 $n_subs)
 
 do
@@ -52,7 +54,7 @@ do
   mkdir /data/bids_r2d4/sub-${bids_id}/ses-pre/fmap/
   mkdir /data/bids_r2d4/sub-${bids_id}/ses-post/fmap/
 
-  for session in pre post
+  for session in pre post # directory names were chosen before switch to BIDS hence need case switch here. 
   do
     #case esac wtf bash.
     case $session in
@@ -64,7 +66,6 @@ do
       ;;
     esac
 
-    nruns=6 #how many individual runs per session
     for run in $(seq 1 $nruns)
     do
       cp /data/r2d4/subjects/${subject}_${count}/RER_Run${run}_01/RER_Run${run}_01.nii \
@@ -73,15 +74,15 @@ do
     done
     # Grabs the onsets for this subject and session and remakes them according to BIDS format
     # At minimum your onsets must contain columns for ['onset', 'duration'] with those precise names, other columns are optional
-    python /data/bids_r2d4/code/bids_r2d4_onsets.py ${subject} ${session} ${bids_id}
+    python /data/bids_r2d4/code/bids_r2d4_onsets.py ${subject} ${session} ${bids_id} # this remakes my specific onset csv to be BIDS compliant
 
-    # Copy the phase and magnitude fieldmaps if you have them. 
+    # Copy the phase and magnitude fieldmaps if you collected them
     cp /data/r2d4/subjects/${subject}_${count}/${fmap_name}_01/${fmap_name}_01.nii \
     /data/bids_r2d4/sub-${bids_id}/ses-${session}/fmap/sub-${bids_id}_ses-${session}_phasediff.nii
     cp /data/r2d4/subjects/${subject}_${count}/${fmap_name}/${fmap_name}.nii \
     /data/bids_r2d4/sub-${bids_id}/ses-${session}/fmap/sub-${bids_id}_ses-${session}_magnitude.nii
 
-    #BIDS format prefers compression for all nii
+    #BIDS prefers compression for all niis
     gzip /data/bids_r2d4/sub-${bids_id}/ses-${session}/fmap/sub-${bids_id}_ses-${session}_phasediff.nii
     gzip /data/bids_r2d4/sub-${bids_id}/ses-${session}/fmap/sub-${bids_id}_ses-${session}_magnitude.nii
 
@@ -106,9 +107,9 @@ do
   --outfile /data/bids_r2d4/sub-${bids_id}/ses-pre/anat/sub-${bids_id}_ses-pre_T2w.nii
 
 
-  # BIDS format prefers compression again
+  # BIDS prefers compression again
   gzip /data/bids_r2d4/sub-${bids_id}/ses-pre/anat/sub-${bids_id}_ses-pre_T1w.nii
   gzip /data/bids_r2d4/sub-${bids_id}/ses-pre/anat/sub-${bids_id}_ses-pre_T2w.nii
 
-  let id_count=id_count+1 #takes about 5 minutes per subject to do all of this on my machine. Final dataset is 35 Gb. 
+  let id_count=id_count+1 #takes about 5 minutes per subject to do all of this on my machine.  
 done
