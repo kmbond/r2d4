@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 # We are aiming for the following file structure (see the docs for details) http://bids.neuroimaging.io/bids_spec1.0.2.pdf
+# and this paper: https://github.com/CoAxLab/DataSciencePsychNeuro_CMU85732/blob/master/Readings/Gorgolewski_etal_2016.pdf
 #  /source_data
 #   README
 #   participants.tsv
@@ -20,6 +21,8 @@
 #         phase
 #         magnitude
 #         phase.json
+#    /sub-02
+#    /sub-03 ...
 
 # Requirements for openfMRI:
 # - Deface your high res T1/T2 - this python script https://github.com/poldracklab/pydeface will do that nicely
