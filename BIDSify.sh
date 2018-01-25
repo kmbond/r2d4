@@ -40,7 +40,7 @@ t2_name='t2_spc_sag_p2_iso'
 id_count=1
 n_subs=18 # change to your specific n_subs
 nruns=6 # how many independent runs per scanning session 
-((i = 0; i < n; i++))
+
 for ((subject = 0; subject < n_subs; subject++)); do
   printf -v bids_id "%02d" ${id_count} #left padding with zeros for BIDS compliancy
   # Change this dir structure to your preference e.g. bids_${study_name} o/w you want the exact same naming conventions
